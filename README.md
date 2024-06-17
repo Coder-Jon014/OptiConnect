@@ -78,3 +78,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+### Contributing
+1. **Fork the repository.**
+2. **Create your feature branch (git checkout -b feature/your-feature).**
+3. **Commit your changes (git commit -am 'Add your feature').**
+4. **Push to the branch (git push origin feature/your-feature).**
+5. **Create a new Pull Request.**

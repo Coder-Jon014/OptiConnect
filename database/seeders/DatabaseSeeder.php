@@ -3,8 +3,19 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+USE App\Models\Parish;
+use App\Models\Town;
+use App\Models\Resource;
+use App\Models\CustomerType;
+use App\Models\Customer;
+use App\Models\OLT;
+use App\Models\Team;
+use App\Models\Outage_History;
+use App\Models\SLA;
+
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +24,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            ParishSeeder::class,
+            TownSeeder::class,
+            ResourceSeeder::class,
+            CustomerTypeSeeder::class,
+            CustomerSeeder::class,
+            TeamSeeder::class,
+            OLTSeeder::class,
+            OutageHistorySeeder::class,
+            SLASeeder::class,
         ]);
     }
 }

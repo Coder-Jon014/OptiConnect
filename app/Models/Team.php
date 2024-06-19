@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Models;
+// app/Models/Team.php
+
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,10 +12,17 @@ class Team extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['team_name', 'team_type'];
+    protected $primaryKey = 'team_id';
 
-    public function resources()
+    protected $fillable = [
+        'team_name',
+        'team_type',
+        'resource_id', // Ensure this is included in the fillable properties
+    ];
+
+    public function resource()
     {
-        return $this->belongsToMany(Resource::class, 'resource_team');
+        return $this->belongsTo(Resource::class, 'resource_id', 'resource_id');
     }
 }
+

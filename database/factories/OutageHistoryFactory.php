@@ -2,12 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\OutageHistory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Outage_History>
- */
 class OutageHistoryFactory extends Factory
 {
     protected $model = OutageHistory::class;
@@ -21,8 +18,8 @@ class OutageHistoryFactory extends Factory
         $endDate = $this->faker->dateTimeBetween($startDate, 'now');
 
         return [
-            'olt_id' => \App\Models\OLT::inRandomOrder()->first()->id,
-            'team_id' => \App\Models\Team::inRandomOrder()->first()->id,
+            'olt_id' => \App\Models\OLT::inRandomOrder()->first()->olt_id,
+            'team_id' => \App\Models\Team::inRandomOrder()->first()->team_id,
             'start_time' => $startDate,
             'end_time' => $endDate,
             'duration' => $endDate->getTimestamp() - $startDate->getTimestamp(), // Duration in seconds

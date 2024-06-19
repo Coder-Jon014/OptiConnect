@@ -9,10 +9,12 @@ class SLA extends Model
 {
     use HasFactory;
 
+    protected $table = 'slas'; // Ensure this matches the table name in the migration
+
     protected $fillable = [
         'customer_type_id',
         'max_duration',
         'compensation_details',
-        'outage_history_id', // If you want to link to outage history
+        'outage_history_id',
     ];
 }

@@ -20,10 +20,10 @@ class CustomerFactory extends Factory
             'customer_name' => $this->faker->name,
             'telephone' => $this->faker->phoneNumber,
             'town_id' => function () {
-                return \App\Models\town::factory()->create()->id;
+                return \App\Models\town::factory()->create()->town_id;
             },
             'customer_type_id' => function () {
-                return \App\Models\CustomerType::factory()->create()->id;
+                return \App\Models\CustomerType::factory()->create()->customer_type_id;
             },
         ];
     }

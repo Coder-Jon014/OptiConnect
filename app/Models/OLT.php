@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class OLT extends Model
 {
+    use HasFactory;
+
+    protected $table = 'olts'; // Ensure this matches the table name in the migration
+
+    protected $primaryKey = 'olt_id';
+
     protected $fillable = [
         'olt_name',
         'parish_id',

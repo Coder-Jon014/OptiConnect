@@ -28,10 +28,15 @@ class TeamSeeder extends Seeder
         // Define the teams and their types
         $teams = [
             ['team_name' => 'Team Alpha', 'team_type' => 'External'],
+            ['team_name' => 'Team Alpha', 'team_type' => 'Internal'],
+            ['team_name' => 'Team Bravo', 'team_type' => 'External'],
             ['team_name' => 'Team Bravo', 'team_type' => 'Internal'],
             ['team_name' => 'Team Charlie', 'team_type' => 'External'],
+            ['team_name' => 'Team Charlie', 'team_type' => 'Internal'],
+            ['team_name' => 'Team Delta', 'team_type' => 'External'],
             ['team_name' => 'Team Delta', 'team_type' => 'Internal'],
             ['team_name' => 'Team Echo', 'team_type' => 'External'],
+            ['team_name' => 'Team Echo', 'team_type' => 'Internal'],
         ];
 
         // Create teams and associate them with random resources

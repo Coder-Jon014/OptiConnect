@@ -8,6 +8,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
         document.getElementById('background')?.classList.add('!hidden');
     };
 
+    
     return (
         <>
             <Head title="Welcome" />

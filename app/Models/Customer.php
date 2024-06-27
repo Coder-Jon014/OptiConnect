@@ -20,11 +20,11 @@ class Customer extends Model
 
     public function town()
     {
-        return $this->belongsTo(Town::class);
+        return $this->belongsTo(Town::class, 'town_id');
     }
 
     public function customerType()
     {
-        return $this->belongsTo(CustomerType::class);
+        return $this->belongsTo(CustomerType::class, 'customer_type_id');
     }
 }

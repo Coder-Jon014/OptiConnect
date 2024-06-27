@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
+use App\Http\Resources\CustomerResource;
 
 class CustomerController extends Controller
 {
@@ -13,7 +14,12 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        $query = Customer::query(); // Get all customers
+        $customers = $query->paginate(10)->onEachSide(1); // Paginate customers
+
+        return inertia('Customers/Index', [
+            "customers" => CustomerResource::collection($customers),
+        ]);
     }
 
     /**

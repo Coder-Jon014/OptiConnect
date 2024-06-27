@@ -13,7 +13,7 @@ class CreateCustomersTable extends Migration
             $table->string('customer_name');
             $table->string('telephone');
             // $table->unsignedBigInteger('town_id');
-            $table->foreignId('town_id')->refernences('town_id')->on('towns')->onDelete('cascade');
+            $table->foreignId('town_id')->references('town_id')->on('towns')->onDelete('cascade');
             $table->unsignedBigInteger('customer_type_id');
             $table->foreign('customer_type_id')->references('customer_type_id')->on('customer_types')->onDelete('cascade');
             $table->timestamps();

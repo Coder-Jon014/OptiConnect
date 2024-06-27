@@ -26,6 +26,21 @@ class OLT extends Model
         'level'
     ];
 
+    public function parish()
+    {
+        return $this->belongsTo(Parish::class, 'parish_id');
+    }
+
+    public function town()
+    {
+        return $this->belongsTo(Town::class, 'town_id');
+    }
+
+    public function resource()
+    {
+        return $this->belongsTo(Resource::class, 'resource_id');
+    }
+
     public static function boot()
     {
         parent::boot();

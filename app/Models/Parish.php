@@ -10,6 +10,8 @@ class Parish extends Model
 {
     use HasFactory;
 
+    protected $primary_key = 'parish_id'; // Custom primary key
+
     protected $fillable = [
         'parish_name',
     ];

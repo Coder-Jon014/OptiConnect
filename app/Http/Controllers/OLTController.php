@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\OLT;
 use App\Http\Requests\StoreOLTRequest;
 use App\Http\Requests\UpdateOLTRequest;
+use App\Http\Resources\OLTResource;
 
 class OLTController extends Controller
 {
@@ -13,7 +14,12 @@ class OLTController extends Controller
      */
     public function index()
     {
-        //
+        $query = OLT::query(); // Get all OLTs
+        $olts = $query->paginate(10)->onEachSide(1); // Paginate OLTs
+
+        return inertia('OLTS/Index', [
+            "olts" => OLTResource::collection($olts),
+        ]);
     }
 
     /**

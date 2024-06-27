@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\OutageHistory;
 use App\Http\Requests\StoreOutageHistoryRequest;
 use App\Http\Requests\UpdateOutageHistoryRequest;
+use App\Http\Resources\OutageResource;
 
 class OutageController extends Controller
 {
@@ -13,7 +14,12 @@ class OutageController extends Controller
      */
     public function index()
     {
-        //
+        $query = OutageHistory::query(); // Get all outages
+        $outages = $query->paginate(10)->onEachSide(1); // Paginate outages
+
+        return inertia('Outages/Index', [
+            "outages" => OutageResource::collection($outages),
+        ]);
     }
 
     /**

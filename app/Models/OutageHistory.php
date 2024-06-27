@@ -27,6 +27,6 @@ class OutageHistory extends Model
     // Define the relationship with Team
     public function team()
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo(Team::class, 'team_id');
     }
 }

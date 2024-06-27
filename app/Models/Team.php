@@ -24,5 +24,10 @@ class Team extends Model
     {
         return $this->belongsTo(Resource::class, 'resource_id', 'resource_id');
     }
+
+    public function outageHistories()
+    {
+        return $this->hasMany(OutageHistory::class, 'team_id');
+    }
 }
 

@@ -14,6 +14,14 @@ class OutageResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            "outage_id" => $this->id,
+            "olt" => $this->olt_id,
+            "team_id" => $this->team_id,
+            "team" => $this->team ? $this->team->team_name : null,
+            "start_time" => $this->start_time,
+            "end_time" => $this->end_time,
+            "duration" => $this->duration,
+        ];
     }
 }

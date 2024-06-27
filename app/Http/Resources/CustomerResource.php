@@ -18,8 +18,8 @@ class CustomerResource extends JsonResource
             'customer_id' => $this->customer_id,
             'customer_name' => $this->customer_name,
             'telephone' => $this->telephone,
-            // 'town' => $this->town,
-            // 'customerType' => $this->customerType,
+            'town' => $this->town,
+            'customerType' => $this->customerType,
         ];
     }
 }

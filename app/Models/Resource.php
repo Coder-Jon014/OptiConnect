@@ -9,6 +9,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Resource extends Model
 {
     use HasFactory;
@@ -21,6 +22,11 @@ class Resource extends Model
 
     public function teams()
     {
-        return $this->hasMany(Team::class, 'resource_id', 'resource_id');
+        return $this->hasMany(Team::class, 'resource_name', 'resource_name');
+    }
+
+    public function olts()
+    {
+        return $this->hasMany(OLT::class, 'resource_id', 'resource_id');
     }
 }

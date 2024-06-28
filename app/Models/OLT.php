@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Parish;
+use App\Models\Town;
+use App\Models\Resource;
 
 class OLT extends Model
 {
@@ -11,7 +14,7 @@ class OLT extends Model
 
     protected $table = 'olts'; // Ensure this matches the table name in the migration
 
-    protected $primaryKey = 'olt_id';
+    // protected $primaryKey = 'olt_id';
 
     protected $fillable = [
         'olt_name',
@@ -28,7 +31,7 @@ class OLT extends Model
 
     public function parish()
     {
-        return $this->belongsTo(Parish::class, 'parish_id');
+        return $this->belongsTo(Parish::class, 'parish_id', 'parish_id');
     }
 
     public function town()
@@ -38,7 +41,7 @@ class OLT extends Model
 
     public function resource()
     {
-        return $this->belongsTo(Resource::class, 'resource_id');
+        return $this->belongsTo(Resource::class, 'resource_id', 'resource_id');
     }
 
     public static function boot()

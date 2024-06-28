@@ -14,8 +14,8 @@ class OLTController extends Controller
      */
     public function index()
     {
-        $query = OLT::query(); // Get all OLTs
-        $olts = $query->paginate(10)->onEachSide(1); // Paginate OLTs
+        
+        $olts = OLT::with(['parish', 'town', 'resource'])->get();
 
         return inertia('OLTS/Index', [
             "olts" => OLTResource::collection($olts),

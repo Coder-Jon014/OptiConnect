@@ -14,7 +14,7 @@ class OLT extends Model
 
     protected $table = 'olts'; // Ensure this matches the table name in the migration
 
-    // protected $primaryKey = 'olt_id';
+    protected $primaryKey = 'olt_id';
 
     protected $fillable = [
         'olt_name',

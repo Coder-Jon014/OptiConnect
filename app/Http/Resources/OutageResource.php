@@ -21,7 +21,7 @@ class OutageResource extends JsonResource
             "team" => $this->team ? $this->team->team_name : null,
             "start_time" => $this->start_time,
             "end_time" => $this->end_time,
-            "duration" => $this->duration,
+            "duration" => $this->duration / 3600,
         ];
     }
 }

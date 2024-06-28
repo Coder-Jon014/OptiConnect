@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             CustomerSeeder::class,
             OLTSeeder::class,
             OutageHistorySeeder::class,
-            // SLASeeder::class,
+            SLASeeder::class,
         ]);
     }
 }

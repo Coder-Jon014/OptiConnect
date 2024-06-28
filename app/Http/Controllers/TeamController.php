@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Team;
 use App\Http\Requests\StoreTeamRequest;
 use App\Http\Requests\UpdateTeamRequest;
+use App\Http\Resources\TeamResource;
+use Illuminate\Support\Facades\Log;
 
 class TeamController extends Controller
 {
@@ -13,7 +15,14 @@ class TeamController extends Controller
      */
     public function index()
     {
-        //
+        
+        $teams = Team::with('resources')->get();
+        // log team information
+        Log::info('Team Controller Debug', ['teams' => $teams]);
+
+        return inertia('Teams/Index', [
+            "teams" => TeamResource::collection($teams),
+        ]);
     }
 
     /**

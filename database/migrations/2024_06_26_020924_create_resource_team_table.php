@@ -1,5 +1,5 @@
-<?php
 
+<?php
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,11 +10,12 @@ class CreateResourceTeamTable extends Migration
     {
         Schema::create('resource_team', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('resource_id');
             $table->unsignedBigInteger('team_id');
-            $table->foreign('resource_id')->references('resource_id')->on('resources')->onDelete('cascade');
-            $table->foreign('team_id')->references('team_id')->on('teams')->onDelete('cascade');
+            $table->unsignedBigInteger('resource_id');
             $table->timestamps();
+
+            $table->foreign('team_id')->references('team_id')->on('teams')->onDelete('cascade');
+            $table->foreign('resource_id')->references('resource_id')->on('resources')->onDelete('cascade');
         });
     }
 
@@ -23,4 +24,3 @@ class CreateResourceTeamTable extends Migration
         Schema::dropIfExists('resource_team');
     }
 }
-

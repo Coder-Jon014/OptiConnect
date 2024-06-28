@@ -17,12 +17,12 @@ class Team extends Model
     protected $fillable = [
         'team_name',
         'team_type',
-        'resource_name', // Ensure this is included in the fillable properties
+        // 'resource_name',
     ];
 
-    public function resource()
+    public function resources()
     {
-        return $this->belongsTo(Resource::class, 'resource_name', 'resource_name');
+        return $this->belongsToMany(Resource::class, 'resource_team', 'team_id', 'resource_id');
     }
 
     public function outageHistories()

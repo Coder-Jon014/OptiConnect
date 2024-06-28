@@ -14,7 +14,7 @@ class Resource extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'resource_id'; // Ensure this matches the primary key column in the migration
+    protected $primaryKey = 'resource_id';
 
     protected $fillable = [
         'resource_name',
@@ -22,7 +22,7 @@ class Resource extends Model
 
     public function teams()
     {
-        return $this->hasMany(Team::class, 'resource_name', 'resource_name');
+        return $this->belongsToMany(Team::class, 'resource_team', 'resource_id', 'team_id');
     }
 
     public function olts()

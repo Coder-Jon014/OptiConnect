@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Carbon\Carbon;
 
 class OutageResource extends JsonResource
 {
@@ -16,12 +17,13 @@ class OutageResource extends JsonResource
     {
         return [
             "outage_id" => $this->id,
-            "olt" => $this->olt_id,
+            "olt" => $this->olt_id ? $this->olt->olt_name : null,
             "team_id" => $this->team_id,
             "team" => $this->team ? $this->team->team_name : null,
-            "start_time" => $this->start_time,
-            "end_time" => $this->end_time,
+            "start_time" => (new Carbon($this->start_time))->format('Y-m-d H:i:s') ,
+            "end_time" => (new Carbon($this->end_time))->format('Y-m-d H:i:s'),
             "duration" => $this->duration / 3600,
+            "status" => $this->status,
         ];
     }
 }

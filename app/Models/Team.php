@@ -17,7 +17,7 @@ class Team extends Model
     protected $fillable = [
         'team_name',
         'team_type',
-        // 'resource_name',
+        'status'
     ];
 
     public function resources()

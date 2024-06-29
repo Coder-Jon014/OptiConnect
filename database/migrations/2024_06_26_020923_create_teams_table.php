@@ -12,6 +12,7 @@ class CreateTeamsTable extends Migration
             $table->id('team_id'); // Ensure this is the primary key
             $table->string('team_name');
             $table->string('team_type');
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }

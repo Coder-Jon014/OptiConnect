@@ -5,3 +5,5 @@ export default function InputLabel({ value, className = '', children, ...props }
         </label>
     );
 }
+
+

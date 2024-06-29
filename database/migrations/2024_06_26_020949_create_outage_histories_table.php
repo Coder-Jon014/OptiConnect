@@ -14,12 +14,13 @@ class CreateOutageHistoriesTable extends Migration
             $table->unsignedBigInteger('team_id')->nullable();
             $table->timestamp('start_time');
             $table->timestamp('end_time')->nullable();
-            $table->integer('duration');
+            $table->integer('duration')->nullable();
             $table->text('resolution_details')->nullable();
             $table->timestamps();
 
             $table->foreign('olt_id')->references('olt_id')->on('olts')->onDelete('cascade');
             $table->foreign('team_id')->references('team_id')->on('teams')->onDelete('cascade');
+            $table->boolean('status')->default(1);
         });
     }
 

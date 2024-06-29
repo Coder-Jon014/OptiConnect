@@ -16,12 +16,18 @@ class OutageHistory extends Model
         'end_time',
         'duration',
         'resolution_details',
+        'status'
+    ];
+
+    protected $casts = [
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
     ];
 
     // Define the relationship with OLT
     public function olt()
     {
-        return $this->belongsTo(OLT::class);
+        return $this->belongsTo(OLT::class, 'olt_id');
     }
 
     // Define the relationship with Team

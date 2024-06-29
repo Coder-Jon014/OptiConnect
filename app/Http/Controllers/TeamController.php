@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTeamRequest;
 use App\Http\Requests\UpdateTeamRequest;
 use App\Http\Resources\TeamResource;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 class TeamController extends Controller
 {

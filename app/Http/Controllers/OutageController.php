@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
+
 class OutageController extends Controller
 {
     /**
@@ -19,11 +20,9 @@ class OutageController extends Controller
      */
     public function index()
     {
-        $query = OutageHistory::query(); // Get all outages
-        $outages = $query->paginate(20)->onEachSide(1); // Paginate outages
-
+        $outages = OutageHistory::with('team', 'olt')->get();
         return inertia('Outages/Index', [
-            "outages" => OutageResource::collection($outages),
+            "outages" => $outages,
         ]);
     }
 

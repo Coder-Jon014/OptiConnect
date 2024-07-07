@@ -20,6 +20,7 @@ class OutageResource extends JsonResource
             "olt" => $this->olt_id ? $this->olt->olt_name : null,
             "team_id" => $this->team_id,
             "team" => $this->team ? $this->team->team_name : null,
+            "team_type" => $this->team ? $this->team->team_type : null,
             "start_time" => (new Carbon($this->start_time))->format('Y-m-d H:i:s') ,
             "end_time" => (new Carbon($this->end_time))->format('Y-m-d H:i:s'),
             "duration" => $this->duration / 3600,

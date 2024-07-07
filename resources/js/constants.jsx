@@ -1,7 +1,7 @@
-export const OUTAGE_STATUS_CLASS_MAP ={
-    'Active': 'bg-red-500',
-    'Resolved': 'bg-green-500',
-}
+export const OUTAGE_STATUS_CLASS_MAP = {
+    'Active': 'text-red-500',
+    'Resolved': 'text-green-500',
+};
 
 export const OLT_RANKING_CLASS_MAP = {
     '1' : 'bg-green-500',
@@ -12,6 +12,6 @@ export const OLT_RANKING_CLASS_MAP = {
 }
 
 export const OLT_LEVEL_CLASS_MAP = {
-    'Low' : 'bg-green-500',
-    'High' : 'bg-red-500',
+    'Low' : 'text-green-500',
+    'High' : 'text-red-500',
 }

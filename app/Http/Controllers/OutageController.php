@@ -11,6 +11,7 @@ use App\Models\Team;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 
 class OutageController extends Controller
@@ -20,11 +21,43 @@ class OutageController extends Controller
      */
     public function index()
     {
-        $outages = OutageHistory::with('team', 'olt')->get();
+        $query = OutageHistory::query(); // Get all outages
+        $sortField = request("sort_field", "start_time");
+        $sortDirection = request("sort_direction", "asc");
+    
+        if (request("olt")){
+            $query->whereHas('olt', function($q) {
+                $q->where('olt_name', 'LIKE', '%' . request('olt') . '%');
+            });
+        }
+        if (request("team")) {
+            $query->whereHas('team', function($q) {
+                $q->where('team_name', 'LIKE', '%' . request('team') . '%');
+            });
+        }
+    
+        // Handle sorting fields
+        if ($sortField === 'olt') {
+            $query->join('olts', 'outage_histories.olt_id', '=', 'olts.olt_id')
+                  ->select('outage_histories.*')
+                  ->orderBy('olts.olt_name', $sortDirection);
+        } elseif ($sortField === 'team') {
+            $query->join('teams', 'outage_histories.team_id', '=', 'teams.team_id')
+                  ->select('outage_histories.*')
+                  ->orderBy('teams.team_name', $sortDirection);
+        } else {
+            $query->orderBy($sortField, $sortDirection);
+        }
+    
+        // Paginate outages
+        $outages = $query->paginate(10)->onEachSide(1);
+    
         return inertia('Outages/Index', [
-            "outages" => $outages,
+            "outages" => OutageResource::collection($outages),
+            'queryParams' => request()->query() ?: null,
         ]);
     }
+    
 
     /**
      * Generate a live outage

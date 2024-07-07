@@ -18,9 +18,6 @@ class TeamController extends Controller
     {
         
         $teams = Team::with('resources')->get();
-        // log team information
-        Log::info('Team Controller Debug', ['teams' => $teams]);
-
         return inertia('Teams/Index', [
             "teams" => TeamResource::collection($teams),
         ]);

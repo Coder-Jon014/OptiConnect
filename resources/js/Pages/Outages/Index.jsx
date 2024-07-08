@@ -180,7 +180,7 @@ export default function Index({ auth, outages, queryParams = null }) {
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.team_type}</td>
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.start_time}</td>
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.end_time}</td>
-                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{Math.max(0, (outage.duration)).toFixed(2)}</td>
+                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{Math.max(0, (outage.duration)).toFixed(5)}</td>
                           <td className={`py-2 px-4 border-b border-gray-200 dark:border-gray-700 ${OUTAGE_STATUS_CLASS_MAP[outage.status ? 'Active' : 'Resolved']}`}>{outage.status ? 'Active' : 'Resolved'}</td>
                         </tr>
                       ))}

@@ -2,7 +2,8 @@ import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import StatisticsCard from '@/Components/StatisticsCard';
-import { OUTAGE_STATUS_CLASS_MAP } from '@/constants';
+import { OUTAGE_STATUS_CLASS_MAP, TEAM_STATUS_CLASS_MAP } from '@/constants';
+import { format } from 'date-fns';
 
 const Dashboard = ({ auth, stats, recentOutages, teamStatus }) => {
     // Debugging: Log props to ensure data is received
@@ -62,7 +63,7 @@ const Dashboard = ({ auth, stats, recentOutages, teamStatus }) => {
                                         <tr key={index} className="text-customBlue">
                                             <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.olt.olt_name}</td>
                                             <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.team.team_name}</td>
-                                            <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.start_time}</td>
+                                            <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{format(new Date(outage.start_time), 'yyyy-MM-dd HH:mm:ss')}</td>
                                             <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{Math.max(0, (outage.duration / 3600)).toFixed(2)}</td>
                                             <td className={`py-2 px-4 border-b border-gray-200 dark:border-gray-700 ${OUTAGE_STATUS_CLASS_MAP[outage.status ? 'Active' : 'Resolved']}`}>{outage.status ? 'Active' : 'Resolved'}</td>
                                         </tr>
@@ -82,6 +83,7 @@ const Dashboard = ({ auth, stats, recentOutages, teamStatus }) => {
                                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Team ID</th>
                                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Team Name</th>
                                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Resources</th>
+                                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -94,6 +96,7 @@ const Dashboard = ({ auth, stats, recentOutages, teamStatus }) => {
                                                     <span key={idx}>{resource.resource_name}{idx < team.resources.length - 1 ? ', ' : ''}</span>
                                                 ))}
                                             </td>
+                                            <td className={`py-2 px-4 border-b border-gray-200 dark:border-gray-700 ${TEAM_STATUS_CLASS_MAP [team.status ? 'Active' : 'Inactive']}`}>{team.status ? 'Active' : 'Inactive'}</td>
                                         </tr>
                                     ))}
                                 </tbody>

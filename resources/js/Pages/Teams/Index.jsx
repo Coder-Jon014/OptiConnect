@@ -25,7 +25,7 @@ export default function Index({ auth, teams }) {
                     </thead>
                     <tbody>
                       {teams.data.map((team) => (
-                        <tr key={team.team_name} className="text-customBlue">
+                        <tr key={team.team_id} className="text-customBlue">
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{team.team_name}</td>
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{team.team_type}</td>
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">

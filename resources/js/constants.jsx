@@ -3,6 +3,11 @@ export const OUTAGE_STATUS_CLASS_MAP = {
     'Resolved': 'text-green-500',
 };
 
+export const TEAM_STATUS_CLASS_MAP = {
+    'Active': 'text-red-500',
+    'Inactive': 'text-green-500',
+};
+
 export const OLT_RANKING_CLASS_MAP = {
     '1' : 'bg-green-500',
     '2' : 'bg-yellow-500',

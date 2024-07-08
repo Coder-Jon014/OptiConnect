@@ -61,13 +61,13 @@ export default function Index({ auth, outages, queryParams = null }) {
           <div className="mt-4">
             <div className='py-3'>
               <button
-                onClick={() => handleGenerateOutage}
+                onClick={handleGenerateOutage}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
               >
                 Generate Outage
               </button>
               <button
-                onClick={() => handleStopOutages}
+                onClick={handleStopOutages}
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               >
                 Stop All Outages
@@ -180,7 +180,7 @@ export default function Index({ auth, outages, queryParams = null }) {
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.team_type}</td>
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.start_time}</td>
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.end_time}</td>
-                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{Math.max(0, (outage.duration / 3600)).toFixed(2)}</td>
+                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{Math.max(0, (outage.duration)).toFixed(2)}</td>
                           <td className={`py-2 px-4 border-b border-gray-200 dark:border-gray-700 ${OUTAGE_STATUS_CLASS_MAP[outage.status ? 'Active' : 'Resolved']}`}>{outage.status ? 'Active' : 'Resolved'}</td>
                         </tr>
                       ))}

@@ -23,7 +23,7 @@ class OutageController extends Controller
     {
         $query = OutageHistory::query(); // Get all outages
         $sortField = request("sort_field", "start_time");
-        $sortDirection = request("sort_direction", "asc");
+        $sortDirection = request("sort_direction", "desc");
     
         if (request("olt")){
             $query->whereHas('olt', function($q) {

@@ -60,11 +60,11 @@ const Dashboard = ({ auth, stats, recentOutages, teamStatus }) => {
                                 </thead>
                                 <tbody>
                                     {recentOutages.map((outage, index) => (
-                                        <tr key={index} className="text-customBlue">
+                                        <tr key={index} className="text-customBlue ">
                                             <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.olt.olt_name}</td>
                                             <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.team.team_name}</td>
                                             <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{format(new Date(outage.start_time), 'yyyy-MM-dd HH:mm:ss')}</td>
-                                            <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{Math.max(0, (outage.duration / 3600)).toFixed(2)}</td>
+                                            <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{Math.max(0, (outage.duration / 86400)).toFixed(0)}</td>
                                             <td className={`py-2 px-4 border-b border-gray-200 dark:border-gray-700 ${OUTAGE_STATUS_CLASS_MAP[outage.status ? 'Active' : 'Resolved']}`}>{outage.status ? 'Active' : 'Resolved'}</td>
                                         </tr>
                                     ))}

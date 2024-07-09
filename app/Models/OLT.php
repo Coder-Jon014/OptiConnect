@@ -49,25 +49,8 @@ class OLT extends Model
         parent::boot();
 
         static::saving(function ($olt) {
-            // Calculate rank
-            if ($olt->customer_count <= 5000) {
-                $olt->rank = 1;
-            } elseif ($olt->customer_count <= 10000) {
-                $olt->rank = 2;
-            } elseif ($olt->customer_count <= 15000) {
-                $olt->rank = 3;
-            } elseif ($olt->customer_count <= 20000) {
-                $olt->rank = 4;
-            } else {
-                $olt->rank = 5;
-            }
-
             // Calculate level
-            if ($olt->business_customer_count > 0 && $olt->olt_value > 0) {
-                $olt->level = 'High';
-            } else {
-                $olt->level = 'Low';
-            }
+            $olt->level = ($olt->business_customer_count >= 800) ? 'High' : 'Low';
         });
     }
 }

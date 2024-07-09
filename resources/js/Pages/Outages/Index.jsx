@@ -133,7 +133,7 @@ export default function Index({ auth, outages, queryParams = null }) {
                           sort_field={queryParams.sort_field}
                           sortChanged={sortChanged}
                         >
-                          Duration (hours)
+                          Duration (Days)
                         </TableHeading>
                         <TableHeading
                           name="status"
@@ -180,7 +180,7 @@ export default function Index({ auth, outages, queryParams = null }) {
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.team_type}</td>
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.start_time}</td>
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.end_time}</td>
-                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{Math.max(0, (outage.duration)).toFixed(5)}</td>
+                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{Math.max(0, (outage.duration / 24)).toFixed(0)}</td>
                           <td className={`py-2 px-4 border-b border-gray-200 dark:border-gray-700 ${OUTAGE_STATUS_CLASS_MAP[outage.status ? 'Active' : 'Resolved']}`}>{outage.status ? 'Active' : 'Resolved'}</td>
                         </tr>
                       ))}

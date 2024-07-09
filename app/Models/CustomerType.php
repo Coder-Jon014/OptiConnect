@@ -19,4 +19,9 @@ class CustomerType extends Model
     {
         return $this->hasMany(Customer::class);
     }
+
+    public function slas()
+    {
+        return $this->hasMany(SLA::class);
+    }
 }

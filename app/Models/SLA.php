@@ -17,4 +17,14 @@ class SLA extends Model
         'compensation_details',
         'outage_history_id',
     ];
+
+    public function outageHistory()
+    {
+        return $this->belongsTo(OutageHistory::class, 'outage_history_id');
+    }
+
+    public function customerType()
+    {
+        return $this->belongsTo(CustomerType::class, 'customer_type_id');
+    }
 }

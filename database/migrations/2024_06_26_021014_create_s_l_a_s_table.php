@@ -18,6 +18,10 @@ class CreateSLAsTable extends Migration
 
             $table->foreign('customer_type_id')->references('customer_type_id')->on('customer_types')->onDelete('cascade');
             $table->foreign('outage_history_id')->references('id')->on('outage_histories')->onDelete('cascade');
+
+            $table->float('residential_customer_value')->nullable();
+            $table->float('business_customer_value')->nullable();
+            $table->float('refund_amount')->nullable();
         });
     }
 

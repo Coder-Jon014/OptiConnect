@@ -35,4 +35,9 @@ class OutageHistory extends Model
     {
         return $this->belongsTo(Team::class, 'team_id');
     }
+
+    public function sla()
+    {
+        return $this->hasOne(SLA::class);
+    }
 }

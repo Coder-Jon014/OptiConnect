@@ -70,7 +70,7 @@ class OutageController extends Controller
             return response()->json(['message' => 'No OLT found'], 404);
         }
 
-        $resourceId = $olt->resource_id;
+        $resourceId = $olt->resource_id; // Get the resource ID of the OLT basically checking for the resource this OLT has
 
         $team = Team::whereHas('resources', function ($query) use ($resourceId) {
             $query->where('resources.resource_id', $resourceId);
@@ -91,7 +91,7 @@ class OutageController extends Controller
         $team->save();
 
         return Redirect::back()->with('success', 'Outage generated successfully');
-    }
+    } 
 
     /**
      * Stop a live outage

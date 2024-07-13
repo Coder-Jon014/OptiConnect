@@ -4,6 +4,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { format } from 'date-fns';
 import MapComponent from '@/Components/MapComponent';
+import { M } from 'vite/dist/node/types.d-aGj9QkWt';
 
 const Dashboard = ({ auth, stats, recentOutages, teamStatus }) => {
     return (
@@ -15,7 +16,7 @@ const Dashboard = ({ auth, stats, recentOutages, teamStatus }) => {
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <MapComponent />
+                    <mapComponent />
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                         <StatisticsCard title="Total OLTs" value={stats.totalOlts} />
                         <StatisticsCard title="Total Teams" value={stats.totalTeams} />

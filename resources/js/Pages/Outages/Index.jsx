@@ -6,9 +6,11 @@ import { format } from 'date-fns';
 import Pagination from '@/Components/Pagination';
 import { OUTAGE_STATUS_CLASS_MAP } from '@/constants';
 import TextInput from '@/Components/TextInput';
+import SelectInput from '@/Components/SelectInput';
 import TableHeading from '@/Components/TableHeading';
 
-export default function Index({ auth, outages, queryParams = null }) {
+export default function Index({ auth, outages, slas, queryParams = null }) {
+
 
   queryParams = queryParams || {};
   const searchFieldChanged = (name, value) => {
@@ -143,27 +145,49 @@ export default function Index({ auth, outages, queryParams = null }) {
                         >
                           Status
                         </TableHeading>
+                        <TableHeading
+                          name="refund_amount"
+                          sort_direction={queryParams.sort_direction}
+                          sort_field={queryParams.sort_field}
+                          sortChanged={sortChanged}
+                        >
+                          Refund Amount
+                        </TableHeading>
                       </tr>
                     </thead>
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                       <tr>
                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700"></th>
                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
-                          <TextInput
+                          <SelectInput
                             className="w-full"
                             defaultValue={queryParams.olt}
-                            placeholder="OLT"
-                            onBlur={e => searchFieldChanged('olt', e.target.value)}
-                            onKeyPress={e => onKeyPress('olt', e)} />
+                            onChange={e => searchFieldChanged('olt', e.target.value)} >
+                            <option value="">Select OLT</option>
+                            <option value="OLT St. Jago">OLT St. Jago</option>
+                            <option value="OLT St. Anns Bay">OLT St. Anns Bay</option>
+                            <option value="OLT Mandeville">OLT Mandeville</option>
+                            <option value="OLT Old Harbor">OLT Old Harbor</option>
+                            <option value="OLT Independence City">OLT Independence City</option>
+                            <option value="OLT Dumfries">OLT Dumfries</option>
+                            <option value="OLT Barbican">OLT Barbican</option>
+                            <option value="OLT Bridgeport">OLT Bridgeport</option>
+                          </SelectInput>
                         </th>
                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
-                          <TextInput
+                          <SelectInput
                             className="w-full"
-                            defaultValue={queryParams.team}
-                            placeholder="Team"
-                            onBlur={e => searchFieldChanged('team', e.target.value)}
-                            onKeyPress={e => onKeyPress('team', e)} />
+                            defaultValue={queryParams.team_type}
+                            onChange={e => searchFieldChanged('team', e.target.value)} >
+                            <option value="">Select Team</option>
+                            <option value="Team Alpha">Team Alpha</option>
+                            <option value="Team Bravo">Team Bravo</option>
+                            <option value="Team Charlie">Team Charlie</option>
+                            <option value="Team Delta">Team Delta</option>
+                            <option value="Team Echo">Team Echo</option>
+                          </SelectInput>
                         </th>
+                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700"></th>
                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700"></th>
                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700"></th>
                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700"></th>
@@ -182,6 +206,7 @@ export default function Index({ auth, outages, queryParams = null }) {
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.end_time}</td>
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{Math.max(0, (outage.duration / 24)).toFixed(0)}</td>
                           <td className={`py-2 px-4 border-b border-gray-200 dark:border-gray-700 ${OUTAGE_STATUS_CLASS_MAP[outage.status ? 'Active' : 'Resolved']}`}>{outage.status ? 'Active' : 'Resolved'}</td>
+                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(outage.refund_amount)}</td>
                         </tr>
                       ))}
                     </tbody>

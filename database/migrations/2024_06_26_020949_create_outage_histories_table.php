@@ -14,7 +14,7 @@ class CreateOutageHistoriesTable extends Migration
             $table->unsignedBigInteger('team_id')->nullable();
             $table->timestamp('start_time');
             $table->timestamp('end_time')->nullable();
-            $table->integer('duration')->nullable();
+            $table->bigInteger('duration')->nullable();
             $table->text('resolution_details')->nullable();
             $table->timestamps();
 

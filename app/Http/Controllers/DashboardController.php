@@ -42,12 +42,14 @@ class DashboardController extends Controller
             'totalRefund' => $totalRefund,
         ];
 
-        $recentOutages = OutageHistory::with('olt', 'team')->latest()->take(5)->get();
+        $allOutages = OutageHistory::with('olt', 'team')->get();
+        $recentOutages = OutageHistory::with('olt', 'team')->latest()->take(10)->get();
         $teamStatus = Team::with('resources')->get();
 
         return Inertia::render('Dashboard', [
             'stats' => $stats,
             'recentOutages' => $recentOutages,
+            'allOutages' => $allOutages,
             'teamStatus' => $teamStatus,
         ]);
     }

@@ -38,6 +38,6 @@ class OutageHistory extends Model
 
     public function sla()
     {
-        return $this->hasOne(SLA::class);
+        return $this->hasOne(SLA::class, 'outage_history_id');
     }
 }

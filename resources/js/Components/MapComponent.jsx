@@ -1,83 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import JamaicaMap from '../assets/jamMap.svg?react';
 import OLTTower from '../assets/oltTower.svg?react';
 
-const MapComponent = () => {
+const towers = [
+    {id: 'OLT Negril', top: '42%', left: '19%'},
+    {id: 'OLT Mandeville', top: '59%', left: '40%'},
+    {id: 'OLT St. Anns Bay', top: '40%', left: '50%'},
+    {id: 'OLT Independence City', top: '72%', left: '59%'},
+    {id: 'OLT Old Harbour', top: '68%', left: '56%'},
+    {id: 'OLT St. Jago', top: '62%', left: '60%'},
+    {id: 'OLT Dumfries', top: '64%', left: '66%'},
+    {id: 'OLT Barbican', top: '63%', left: '69%'},
+    {id: 'OLT Bridgeport', top: '68%', left: '62%'},
+];
+
+const MapComponent = ({ title, onTowerClick }) => {
+    const [activeTower, setActiveTower] = useState(null);
+
+    const handleTowerClick = (towerId) => {
+        if (activeTower === towerId) {
+            setActiveTower(null);
+        } else {
+            setActiveTower(towerId);
+        }
+        onTowerClick(towerId);
+    };
+
     return (
-        <div style={{ position: 'relative', width: '100%', height: 'auto' }}>
+        <div style={{ position: 'relative', width: '100%', height: 'auto', marginBottom:'10px' }} className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-200">{title}</h3>
             <JamaicaMap style={{ width: '100%', height: 'auto' }} />
-            <OLTTower id=" OLT Negril" style={{
-                position: 'absolute',
-                top: '37%', // Adjust based on where you want to place the tower
-                left: '16%', // Adjust based on where you want to place the tower
-                width: '30px', // Adjust size as needed
-                height: '30px', // Adjust size as needed
-                fill: 'white'
-            }} />
-            <OLTTower id=" OLT Mandeville" style={{
-                position: 'absolute',
-                top: '59%', // Adjust based on where you want to place the tower
-                left: '40%', // Adjust based on where you want to place the tower
-                width: '30px', // Adjust size as needed
-                height: '30px', // Adjust size as needed
-                fill: 'white'
-            }} />
-            <OLTTower id="OLT St. Anns Bay" style={{
-                position: 'absolute',
-                top: '30%', // Adjust based on where you want to place the tower
-                left: '50%', // Adjust based on where you want to place the tower
-                width: '30px', // Adjust size as needed
-                height: '30px', // Adjust size as needed
-                fill: 'white'
-            }} />
-            <OLTTower id="OLT Independence City" style={{
-                position: 'absolute',
-                top: '74%', // Adjust based on where you want to place the tower
-                left: '62%', // Adjust based on where you want to place the tower
-                width: '30px', // Adjust size as needed
-                height: '30px', // Adjust size as needed
-                fill: 'white'
-            }} />
-            <OLTTower id="OLT Old Harbour" style={{
-                position: 'absolute',
-                top: '70%', // Adjust based on where you want to place the tower
-                left: '56%', // Adjust based on where you want to place the tower
-                width: '30px', // Adjust size as needed
-                height: '30px', // Adjust size as needed
-                fill: 'white'
-            }} />
-            <OLTTower id="OLT St. Jago" style={{
-                position: 'absolute',
-                top: '62%', // Adjust based on where you want to place the tower
-                left: '62%', // Adjust based on where you want to place the tower
-                width: '30px', // Adjust size as needed
-                height: '30px', // Adjust size as needed
-                fill: 'white'
-            }} />
-            <OLTTower id="OLT Dumfries" style={{
-                position: 'absolute',
-                top: '65%', // Adjust based on where you want to place the tower
-                left: '67%', // Adjust based on where you want to place the tower
-                width: '30px', // Adjust size as needed
-                height: '30px', // Adjust size as needed
-                fill: 'white'
-            }} />
-            <OLTTower id="OLT Barbican" style={{
-                position: 'absolute',
-                top: '63%', // Adjust based on where you want to place the tower
-                left: '69%', // Adjust based on where you want to place the tower
-                width: '30px', // Adjust size as needed
-                height: '30px', // Adjust size as needed
-                fill: 'white'
-            }} />
-            <OLTTower id="OLT Bridgeport" style={{
-                position: 'absolute',
-                top: '68%', // Adjust based on where you want to place the tower
-                left: '63.5%', // Adjust based on where you want to place the tower
-                width: '30px', // Adjust size as needed
-                height: '30px', // Adjust size as needed
-                fill: 'white'
-            }} />
+            {towers.map((tower) => (
+                <OLTTower key={tower.id} id={tower.id} onClick={() => handleTowerClick(tower.id)} style={{
+                    position: 'absolute',
+                    top: tower.top,
+                    left: tower.left,
+                    width: '25px',
+                    height: '25px',
+                    fill: activeTower === tower.id ? 'red' : 'white',
+                    cursor: 'pointer'
+                }} />
+            ))}
         </div>
     );
 };

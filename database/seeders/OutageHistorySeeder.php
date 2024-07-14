@@ -9,6 +9,6 @@ class OutageHistorySeeder extends Seeder
 {
     public function run()
     {
-        OutageHistory::factory()->count(5)->create(); // Create 50 outage history entries
+        OutageHistory::factory()->count(15)->create(); // Create 10 outage history entries
     }
 }

@@ -3,39 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\OutageHistory;
-use App\Http\Requests\StoreOutageHistoryRequest;
-use App\Http\Requests\UpdateOutageHistoryRequest;
 use App\Http\Resources\OutageResource;
-use App\Models\OLT;
-use App\Models\Team;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
-
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Redirect;
 
 class OutageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $query = OutageHistory::query(); // Get all outages
-        $sortField = request("sort_field", "start_time");
-        $sortDirection = request("sort_direction", "desc");
-    
-        if (request("olt")){
-            $query->whereHas('olt', function($q) {
-                $q->where('olt_name', 'LIKE', '%' . request('olt') . '%');
+        // Initialize the query
+        $query = OutageHistory::with('olt', 'team', 'sla'); // Get all outages with related models
+
+        // Sorting fields
+        $sortField = $request->input('sort_field', 'start_time');
+        $sortDirection = $request->input('sort_direction', 'desc');
+
+        // Filtering by OLT
+        if ($request->input('olt')) {
+            $query->whereHas('olt', function($q) use ($request) {
+                $q->where('olt_name', 'LIKE', '%' . $request->input('olt') . '%');
             });
         }
-        if (request("team")) {
-            $query->whereHas('team', function($q) {
-                $q->where('team_name', 'LIKE', '%' . request('team') . '%');
+
+        // Filtering by Team
+        if ($request->input('team')) {
+            $query->whereHas('team', function($q) use ($request) {
+                $q->where('team_name', 'LIKE', '%' . $request->input('team') . '%');
             });
         }
-    
+
         // Handle sorting fields
         if ($sortField === 'olt') {
             $query->join('olts', 'outage_histories.olt_id', '=', 'olts.olt_id')
@@ -48,20 +46,16 @@ class OutageController extends Controller
         } else {
             $query->orderBy($sortField, $sortDirection);
         }
-    
+
         // Paginate outages
         $outages = $query->paginate(10)->onEachSide(1);
-    
-        return inertia('Outages/Index', [
+
+        return Inertia::render('Outages/Index', [
             "outages" => OutageResource::collection($outages),
-            'queryParams' => request()->query() ?: null,
+            'queryParams' => $request->query() ?: null,
         ]);
     }
-    
 
-    /**
-     * Generate a live outage
-     */
     public function generateOutage(Request $request)
     {
         $olt = OLT::inRandomOrder()->first();
@@ -93,78 +87,32 @@ class OutageController extends Controller
         return Redirect::back()->with('success', 'Outage generated successfully');
     } 
 
-    /**
-     * Stop a live outage
-     */
     public function stopAllOutages(Request $request)
-    {
-        // Fetch all ongoing outages
-        $ongoingOutages = OutageHistory::where('status', true)->get();
-    
-        // Iterate through each ongoing outage and update its status
-        foreach ($ongoingOutages as $outage) {
-            $outage->end_time = now();
-            $outage->duration = $outage->end_time->diffInSeconds($outage->start_time);
-            $outage->status = false;
-            $outage->save();
-    
-            // Update the status of the team assigned to this outage
-            $team = Team::find($outage->team_id);
-            if ($team) {
-                $team->status = false;
-                $team->save();
-            }
+{
+    // Fetch all ongoing outages
+    $ongoingOutages = OutageHistory::where('status', true)->get();
+
+    // Iterate through each ongoing outage and update its status
+    foreach ($ongoingOutages as $outage) {
+        $endTime = now();
+        $startTime = new \DateTime($outage->start_time);
+        
+        // Ensure that the duration calculation is correct
+        $duration = $endTime->getTimestamp() - $startTime->getTimestamp();
+        
+        $outage->end_time = $endTime;
+        $outage->duration = $duration;
+        $outage->status = false;
+        $outage->save();
+
+        // Update the status of the team assigned to this outage
+        $team = Team::find($outage->team_id);
+        if ($team) {
+            $team->status = false;
+            $team->save();
         }
-    
-        return Redirect::back()->with('success', 'All outages stopped successfully');
-    }
-    
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreOutageHistoryRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(OutageHistory $outageHistory)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(OutageHistory $outageHistory)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateOutageHistoryRequest $request, OutageHistory $outageHistory)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(OutageHistory $outageHistory)
-    {
-        //
-    }
+    return Redirect::back()->with('success', 'All outages stopped successfully');
+}
 }

@@ -14,7 +14,7 @@ class ResourceSeeder extends Seeder
             'Splicer',
             'Cable Engineer',
             'Fiber technician',
-            'Bucket vane',
+            'Bucket Van',
         ];
 
         foreach ($resources as $resource) {

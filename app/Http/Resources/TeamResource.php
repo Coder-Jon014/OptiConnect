@@ -9,11 +9,12 @@ class TeamResource extends JsonResource
 {
     public function toArray($request)
     {
-        Log::info('Team Resource Debug', ['team_name' => $this->team_name, 'resource' => $this->resources]);
 
         return [
+            'team_id' => $this->team_id,
             'team_name' => $this->team_name,
             'team_type' => $this->team_type,
+            'status' => $this->status,
             'resource_name' => $this->resources->pluck('resource_name')->toArray(),
         ];
     }

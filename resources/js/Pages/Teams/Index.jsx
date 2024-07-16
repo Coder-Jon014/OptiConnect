@@ -1,5 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
+import { TEAM_STATUS_CLASS_MAP } from "@/constants";
 
 export default function Index({ auth, teams }) {
   return (
@@ -21,16 +22,18 @@ export default function Index({ auth, teams }) {
                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Team Name</th>
                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Team Type</th>
                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Resources</th>
+                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Team Status</th>
                       </tr>
                     </thead>
                     <tbody>
                       {teams.data.map((team) => (
-                        <tr key={team.team_id} className="text-customBlue">
+                        <tr key={team.team_id} className="text-customBlue text-center">
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{team.team_name}</td>
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{team.team_type}</td>
                           <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
                             {team.resource_name.join(', ')}
                           </td>
+                          <td className={`py-2 px-4 border-b border-gray-200 dark:border-gray-700 ${TEAM_STATUS_CLASS_MAP[team.status ? 'Active' : 'Inactive']}`}>{team.status ? 'Active' : 'Inactive'}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -47,14 +50,13 @@ export default function Index({ auth, teams }) {
 
 
 /*
-    This is the Teams Index page. It is a React functional component. It receives two props: auth and teams.
-    The auth prop is an object that contains the authenticated user information.
-    The teams prop is an array of Teams.
-
-    The component returns an AuthenticatedLayout component that contains the authenticated user information and a header.
-    The header is a heading that says "Teams".
-
-    The component also returns a Head component that sets the title of the page to "Teams".
-
-    The component returns a div element with the class "py-8" that contains a div element with the classes "max-w-7xl mx-auto sm:px-6 lg:px-8".
+    This is the Teams Index page. 
+    It displays a list of teams and their details in a table format.
+    The table displays the following columns:
+    - Team Name
+    - Team Type
+    - Resources
+    - Team Status
+    Each row in the table represents a team and its details.
+    The table is paginated to display a limited number of teams per page.
 */

@@ -59,7 +59,7 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
     >
       <Head title="Outages" />
       <div className="py-8">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div className="w-full mx-auto sm:px-6 lg:px-8">
           <div className="mt-4">
             <div className='py-3'>
               <button

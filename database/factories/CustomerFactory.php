@@ -18,7 +18,7 @@ class CustomerFactory extends Factory
     {
         return [
             'customer_name' => $this->faker->name,
-            'telephone' => $this->faker->phoneNumber,
+            'telephone' => $this->sanitizePhoneNumber($this->faker->phoneNumber),
             'town_id' => function () {
                 return \App\Models\town::factory()->create()->town_id;
             },
@@ -26,5 +26,10 @@ class CustomerFactory extends Factory
                 return \App\Models\CustomerType::factory()->create()->customer_type_id;
             },
         ];
+    }
+
+    private function sanitizePhoneNumber($phone)
+    {
+        return preg_replace('/[^\d]/', '', $phone); // Remove all non-digit characters
     }
 }

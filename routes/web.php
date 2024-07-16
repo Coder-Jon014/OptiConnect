@@ -18,6 +18,7 @@ Route::middleware(['auth', 'verified']) ->group(function() {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('team', TeamController::class);
     Route::resource('customer', CustomerController::class);
+    Route::get('customers/export', [CustomerController::class, 'export'])->name('customers.export');
     Route::resource('olt', OLTController::class);
     Route::resource('outage', OutageController::class);
     Route::resource('sla', SLAController::class);

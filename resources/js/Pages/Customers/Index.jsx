@@ -10,6 +10,7 @@ import { Tab } from "@headlessui/react";
 
 export default function Index({ auth, customers, queryParams = null }) {
     queryParams = queryParams || {};
+    
 
     const searchFieldChanged = (name, value) => {
         if (value) {
@@ -35,6 +36,10 @@ export default function Index({ auth, customers, queryParams = null }) {
         searchFieldChanged(name, e.target.value);
     };
 
+    const handleExport = () => {
+        window.location.href = route('customers.export');
+    };
+
     // Ensure customers is an array
     const customerList = customers.data || [];
 
@@ -46,6 +51,12 @@ export default function Index({ auth, customers, queryParams = null }) {
             <Head title="Customers" />
             <div className="py-8">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <button
+                        onClick={handleExport}
+                        className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded"
+                    >
+                        Export Customers
+                    </button>
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <div className="overflow-auto">

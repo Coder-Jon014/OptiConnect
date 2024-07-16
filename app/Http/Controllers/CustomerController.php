@@ -6,6 +6,9 @@ use App\Models\Customer;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Http\Resources\CustomerResource;
+use App\Exports\CustomersExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class CustomerController extends Controller
 {
@@ -47,6 +50,11 @@ class CustomerController extends Controller
             "customers" => CustomerResource::collection($customers),
             'queryParams' => request()->query() ?: null,
         ]);
+    }
+
+    public function export()
+    {
+        return Excel::download(new CustomersExport, 'customers.xlsx');
     }
         
 

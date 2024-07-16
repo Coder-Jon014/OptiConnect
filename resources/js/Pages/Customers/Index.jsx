@@ -50,18 +50,19 @@ export default function Index({ auth, customers, queryParams = null }) {
         >
             <Head title="Customers" />
             <div className="py-8">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <button
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">                  
+                    <div className="bg-white dark:bg-[var(--background)] overflow-hidden shadow-sm sm:rounded-lg">
+                        
+                        <div className="p-6 text-gray-900 dark:text-gray-100">
+                        <button
                         onClick={handleExport}
-                        className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded"
+                        className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded mb-2"
                     >
                         Export Customers
                     </button>
-                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
                             <div className="overflow-auto">
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
+                                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border-2 border-gray-500 rounded-lg">
+                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[var(--background)] dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr className="text-nowrap">
                                             <TableHeading
                                                 sort_field={queryParams.sort_field}
@@ -102,7 +103,7 @@ export default function Index({ auth, customers, queryParams = null }) {
                                             </TableHeading>
                                         </tr>
                                     </thead>
-                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
+                                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[var(--background)] dark:text-gray-400 border-b-2 border-gray-500">
                                         <tr>
                                             <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700"></th>
                                             <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">

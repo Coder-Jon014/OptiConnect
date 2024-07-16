@@ -1,0 +1,38 @@
+/* Dashboard.css */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 5px 3px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "OLT-Breakdown OLT-Breakdown Refund-Amount Refund-Amount"
+      "MapComponent MapComponent MapComponent Teams"
+      "List-Of-Recent-Outages List-Of-Recent-Outages List-Of-Recent-Outages Teams";
+  }
+  
+  .MapComponent {
+    grid-area: MapComponent;
+    background-color: lightblue; /* Temporary background color */
+  }
+  
+  .OLT-Breakdown {
+    grid-area: OLT-Breakdown;
+    background-color: lightcoral; /* Temporary background color */
+  }
+  
+  .Refund-Amount {
+    grid-area: Refund-Amount;
+    background-color: lightgreen; /* Temporary background color */
+  }
+  
+  .Teams {
+    grid-area: Teams;
+    background-color: lightgoldenrodyellow; /* Temporary background color */
+  }
+  
+  .List-Of-Recent-Outages {
+    grid-area: List-Of-Recent-Outages;
+    background-color: lightgray; /* Temporary background color */
+  }
+  

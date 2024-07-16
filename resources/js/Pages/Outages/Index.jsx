@@ -65,7 +65,8 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
       <div className="py-8">
         <div className="w-full mx-auto sm:px-6 lg:px-8">
           <div className="mt-4">
-            <div className='py-3'>
+            <div className="bg-white dark:bg-[var(--background)] overflow-hidden shadow-sm sm:rounded-lg">
+              <div className="p-6 text-gray-900 dark:text-gray-100">
               <button
                 onClick={handleGenerateOutage}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
@@ -84,12 +85,9 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
               >
                 Export Outage Report
               </button>
-            </div>
-            <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-              <div className="p-6 text-gray-900 dark:text-gray-100">
                 <div className="overflow-auto">
-                  <table className="min-w-full bg-white dark:bg-gray-800 mt-4">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
+                  <table className="min-w-full bg-white dark:bg-[var(--background)] mt-4 border-2 border-gray-500 rounded-lg">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[var(--background)] dark:text-gray-400 border-b-2 border-gray-500">
                       <tr>
                         <TableHeading
                           name="outage_id"
@@ -165,7 +163,7 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
                         </TableHeading>
                       </tr>
                     </thead>
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[var(--background)] dark:text-gray-400 border-b-2 border-gray-500">
                       <tr>
                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700"></th>
                         <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">

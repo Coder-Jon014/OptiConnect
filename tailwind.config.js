@@ -21,5 +21,11 @@ export default {
         },
     },
 
-    plugins: [forms],
+    plugins: [
+        forms,
+        require('postcss-import')({
+            path: ['./resources/css'],
+        })
+
+    ],
 };

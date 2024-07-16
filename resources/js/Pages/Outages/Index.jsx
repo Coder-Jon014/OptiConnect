@@ -52,6 +52,10 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
     Inertia.post('/outages/stop-all');
   };
 
+  const handleExportOutageReport = () => {
+    Inertia.get('/outages/report');
+  }
+
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -73,6 +77,12 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               >
                 Stop All Outages
+              </button>
+              <button
+                onClick={handleExportOutageReport}
+                className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded ml-2"
+              >
+                Export Outage Report
               </button>
             </div>
             <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">

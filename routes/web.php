@@ -23,6 +23,8 @@ Route::middleware(['auth', 'verified']) ->group(function() {
     Route::resource('sla', SLAController::class);
     Route::post('/outages/generate', [OutageController::class, 'generateOutage'])->name('outages.generate');
     Route::post('/outages/stop-all', [OutageController::class, 'stopAllOutages'])->name('outages.stopAll');
+    Route::get('/outages/report', [OutageController::class, 'generateOutageReport'])->name('outages.report');
+
 
 });
 

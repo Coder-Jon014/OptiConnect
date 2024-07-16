@@ -8,6 +8,8 @@ use Inertia\Inertia;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Redirect;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\OutagesExport;
 
 class OutageController extends Controller
 {
@@ -115,4 +117,17 @@ class OutageController extends Controller
 
     return Redirect::back()->with('success', 'All outages stopped successfully');
 }
+    public function generateOutageReport()
+    {
+        return Excel::download(new OutagesExport, 'outages_report.xlsx');
+        
+    }
+
+    private function createOutageReport($outages)
+    {
+        $pdf = PDF::loadView('outage-report', ['outages' => $outages]);
+        $path = storage_path('app/public/reports/OutageReport.pdf');
+        $pdf->save($path);
+        return $path;
+    }
 }

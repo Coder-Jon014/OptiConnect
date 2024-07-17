@@ -6,34 +6,33 @@ export default function Index({ auth, teams }) {
   return (
     <AuthenticatedLayout
       user={auth.user}
-      header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Teams</h2>}
+      header={<h2 className="font-semibold text-xl text-white leading-tight">Teams</h2>}
+      subheader={<p className="font-regular text-md text-[var(--subheader)] leading-tight">List of teams in the system</p>}
     >
       <Head title="Teams" />
 
       <div className="py-8">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="mt-4">
-            <div className="bg-white dark:bg-[var(--background)] overflow-hidden shadow-sm sm:rounded-lg">
+            <div className="overflow-hidden shadow-sm sm:rounded-lg">
               <div className="p-2 text-gray-900 dark:text-gray-100">
-                <div className="overflow-auto">
-                  <table className="min-w-full bg-white dark:bg-[var(--background)] border-2 border-gray-500 rounded-lg">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[var(--background)] dark:text-gray-400 border-b-2 border-gray-500 shadow-lg sm:rounded-lg">
+                <div className="overflow-auto rounded bg-[var(--foreground)] border-2 border-[var(--border)] p-4">
+                  <table className="min-w-full rounded-lg">
+                    <thead className="text-xs text-left text-[var(--table-headings)] uppercase rounded-t-lg border-b border-[var(--border)]">
                       <tr>
-                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Team Name</th>
-                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Team Type</th>
-                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Resources</th>
-                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Team Status</th>
+                        <th className="py-2 px-4 ">Team Name</th>
+                        <th className="py-2 px-4 ">Resources</th>
+                        <th className="py-2 px-4 ">Team Type</th>
+                        <th className="py-2 px-4 ">Team Status</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {teams.data.map((team) => (
-                        <tr key={team.team_id} className="text-customBlue text-center">
-                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{team.team_name}</td>
-                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{team.team_type}</td>
-                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
-                            {team.resource_name.join(', ')}
-                          </td>
-                          <td className={`py-2 px-4 border-b border-gray-200 dark:border-gray-700 ${TEAM_STATUS_CLASS_MAP[team.status ? 'Active' : 'Inactive']}`}>{team.status ? 'Active' : 'Inactive'}</td>
+                      {teams.data.map((team, index) => (
+                        <tr key={team.team_id} className={`hover:bg-[var(--table-hover)] border-b border-[var(--border)] rounded-full text-white text-nowrap ${index === 0 ? 'bg-[var(--even-odd)]' : ''}`}>
+                          <td className="py-2 px-4 rounded-l-lg ">{team.team_name}</td>
+                          <td className="py-2 px-4 ">{team.resource_name.join(', ')}</td>
+                          <td className="py-2 px-4 ">{team.team_type}</td>
+                          <td className={`py-2 px-4 rounded-r-lg ${TEAM_STATUS_CLASS_MAP[team.status ? 'Active' : 'Inactive']}`}>{team.status ? 'Active' : 'Inactive'}</td>
                         </tr>
                       ))}
                     </tbody>

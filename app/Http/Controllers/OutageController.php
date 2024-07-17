@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 use Redirect;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\OutagesExport;
+use Twilio\Rest\Client;
+use App\Models\OLT;
+use App\Models\Team;
+use App\Models\Customer;
+use Illuminate\Support\Facades\Log;
 
 class OutageController extends Controller
 {
@@ -60,10 +65,11 @@ class OutageController extends Controller
 
     public function generateOutage(Request $request)
     {
-        $olt = OLT::inRandomOrder()->first();
+        // Find an OLT with customers
+        $olt = OLT::where('customer_count', '>', 0)->inRandomOrder()->first();
 
         if (!$olt) {
-            return response()->json(['message' => 'No OLT found'], 404);
+            return response()->json(['message' => 'No OLT with customers found'], 404);
         }
 
         $resourceId = $olt->resource_id; // Get the resource ID of the OLT basically checking for the resource this OLT has
@@ -86,8 +92,42 @@ class OutageController extends Controller
         $team->status = true;
         $team->save();
 
+        // Send SMS to customers
+        $this->sendOutageNotifications($olt);
+
         return Redirect::back()->with('success', 'Outage generated successfully');
-    } 
+    }
+
+    /**
+     * Send outage notifications to customers
+     */
+    private function sendOutageNotifications($olt)
+    {
+        // Fetch customers for the OLT
+        $customers = Customer::where('town_id', $olt->town_id)->get();
+
+        $accountSid = env('TWILIO_ACCOUNT_SID');
+        $authToken = env('TWILIO_AUTH_TOKEN');
+        $twilioNumber = env('TWILIO_PHONE_NUMBER');
+        $client = new Client($accountSid, $authToken);
+
+        \Log::info("Twilio SID: $accountSid");
+        \Log::info("Twilio Auth Token: $authToken");
+        \Log::info("Twilio Number: $twilioNumber");
+
+        foreach ($customers as $customer) {
+            $message = "Dear customer {$customer->customer_name}, we are currently experiencing an outage at {$olt->olt_name}. Our team is working on it.";
+            $client->messages->create(
+                $customer->telephone,
+                [
+                    'from' => $twilioNumber,
+                    'body' => $message,
+                ]
+            );
+            //log the message sent
+            Log::info("Message sent to {$customer->telephone}");
+        }
+    }
 
     public function stopAllOutages(Request $request)
 {

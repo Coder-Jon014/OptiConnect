@@ -6,18 +6,19 @@ export default function Index({ auth, olts }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">OLTs</h2>}
+            header={<h2 className="font-semibold text-xl text-white leading-tight">OLTs</h2>}
+            subheader={<p className="font-regular text-md text-[var(--subheader)] leading-tight">List of OLTs in the system</p>}
         >
             <Head title="OLTs" />
 
             <div className="py-8">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="mt-4">
-                        <div className="bg-white dark:bg-[var(--background)] overflow-hidden shadow-sm sm:rounded-lg">
+                        <div className="overflow-hidden shadow-sm sm:rounded-lg">
                             <div className="p-2 text-gray-900 dark:text-gray-100">
-                                <div className="overflow-auto">
-                                    <table className="min-w-full bg-white dark:bg-[var(--background)] border-2 border-gray-500 rounded-lg">
-                                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[var(--background)] dark:text-gray-400 border-b-2 border-gray-500">
+                                <div className="overflow-auto rounded bg-[var(--foreground)] border-2 border-[var(--border)] p-4">
+                                    <table className="min-w-full rounded-lg">
+                                        <thead className="text-xs text-left text-[var(--table-headings)] uppercase rounded-t-lg border-b border-[var(--border)]">
                                             <tr>
                                                 <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">OLT Name</th>
                                                 <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">Parish</th>
@@ -32,18 +33,18 @@ export default function Index({ auth, olts }) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {olts.data.map((olt) => (
-                                                <tr key={olt.olt_id} className="text-customBlue text-nowrap">
-                                                    <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{olt.olt_name}</td>
-                                                    <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{olt.parish}</td>
-                                                    <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{olt.town}</td>
-                                                    <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{olt.customer_count}</td>
-                                                    <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{olt.business_customer_count}</td>
-                                                    <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{olt.residential_customer_count}</td>
-                                                    <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{olt.olt_value}</td>
-                                                    <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{olt.resource_name}</td>
-                                                    <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{olt.rank}</td>
-                                                    <td className={`py-2 px-4 border-b border-gray-200 dark:border-gray-700 ${OLT_LEVEL_CLASS_MAP[olt.level ? 'High' : 'Low']}`}>{olt.level ? 'High' : 'Low'}</td>
+                                            {olts.data.map((olt, index) => (
+                                                <tr key={olt.olt_id} className={`hover:bg-[var(--table-hover)] border-b border-[var(--border)] rounded-full text-white text-nowrap ${index === 0 ? 'bg-[var(--even-odd)]' : ''}`}>
+                                                    <td className="py-2 px-4 rounded-l-lg ">{olt.olt_name}</td>
+                                                    <td className="py-2 px-4 ">{olt.parish}</td>
+                                                    <td className="py-2 px-4 ">{olt.town}</td>
+                                                    <td className="py-2 px-4 ">{olt.customer_count}</td>
+                                                    <td className="py-2 px-4 ">{olt.business_customer_count}</td>
+                                                    <td className="py-2 px-4 ">{olt.residential_customer_count}</td>
+                                                    <td className="py-2 px-4 ">{olt.olt_value}</td>
+                                                    <td className="py-2 px-4 ">{olt.resource_name}</td>
+                                                    <td className="py-2 px-4 ">{olt.rank}</td>
+                                                    <td className={`py-2 px-4 rounded-r-lg ${OLT_LEVEL_CLASS_MAP[olt.level ? 'High' : 'Low']}`}>{olt.level ? 'High' : 'Low'}</td>
                                                 </tr>
                                             ))}
                                         </tbody>

@@ -27,4 +27,9 @@ class Customer extends Model
     {
         return $this->belongsTo(CustomerType::class, 'customer_type_id');
     }
+
+    public function olt()
+    {
+        return $this->belongsTo(OLT::class, 'town_id', 'town_id');
+    }
 }

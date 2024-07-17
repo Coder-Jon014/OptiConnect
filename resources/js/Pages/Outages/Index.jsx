@@ -59,35 +59,36 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
   return (
     <AuthenticatedLayout
       user={auth.user}
-      header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Outages</h2>}
+      header={<h2 className="font-semibold text-xl text-white leading-tight">Outages</h2>}
+      subheader={<p className="font-regular text-md text-[var(--subheader)] leading-tight">List of outages in the system</p>}
     >
       <Head title="Outages" />
       <div className="py-8">
         <div className="w-full mx-auto sm:px-6 lg:px-8">
           <div className="mt-4">
-            <div className="bg-white dark:bg-[var(--background)] overflow-hidden shadow-sm sm:rounded-lg">
+            <div className="overflow-hidden shadow-sm sm:rounded-lg">
               <div className="p-6 text-gray-900 dark:text-gray-100">
               <button
                 onClick={handleGenerateOutage}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 mb-2"
               >
                 Generate Outage
               </button>
               <button
                 onClick={handleStopOutages}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-2"
               >
                 Stop All Outages
               </button>
               <button
                 onClick={handleExportOutageReport}
-                className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded ml-2"
+                className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded ml-2 mb-2"
               >
                 Export Outage Report
               </button>
-                <div className="overflow-auto">
-                  <table className="min-w-full bg-white dark:bg-[var(--background)] mt-4 border-2 border-gray-500 rounded-lg">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[var(--background)] dark:text-gray-400 border-b-2 border-gray-500">
+                <div className="overflow-auto rounded bg-[var(--foreground)] border-2 border-[var(--border)] p-4">
+                  <table className="w-full text-sm text-left rtl:text-right text-white">
+                    <thead className="text-xs text-[var(--table-headings)] uppercase rounded-t-lg border-b border-[var(--border)]">
                       <tr>
                         <TableHeading
                           name="outage_id"
@@ -163,58 +164,18 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
                         </TableHeading>
                       </tr>
                     </thead>
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-[var(--background)] dark:text-gray-400 border-b-2 border-gray-500">
-                      <tr>
-                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700"></th>
-                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
-                          <SelectInput
-                            className="w-full"
-                            defaultValue={queryParams.olt}
-                            onChange={e => searchFieldChanged('olt', e.target.value)} >
-                            <option value="">Select OLT</option>
-                            <option value="OLT St. Jago">OLT St. Jago</option>
-                            <option value="OLT St. Anns Bay">OLT St. Anns Bay</option>
-                            <option value="OLT Mandeville">OLT Mandeville</option>
-                            <option value="OLT Old Harbor">OLT Old Harbor</option>
-                            <option value="OLT Independence City">OLT Independence City</option>
-                            <option value="OLT Dumfries">OLT Dumfries</option>
-                            <option value="OLT Barbican">OLT Barbican</option>
-                            <option value="OLT Bridgeport">OLT Bridgeport</option>
-                          </SelectInput>
-                        </th>
-                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">
-                          <SelectInput
-                            className="w-full"
-                            defaultValue={queryParams.team_type}
-                            onChange={e => searchFieldChanged('team', e.target.value)} >
-                            <option value="">Select Team</option>
-                            <option value="Team Alpha">Team Alpha</option>
-                            <option value="Team Bravo">Team Bravo</option>
-                            <option value="Team Charlie">Team Charlie</option>
-                            <option value="Team Delta">Team Delta</option>
-                            <option value="Team Echo">Team Echo</option>
-                          </SelectInput>
-                        </th>
-                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700"></th>
-                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700"></th>
-                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700"></th>
-                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700"></th>
-                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700"></th>
-                        <th className="py-2 px-4 border-b border-gray-200 dark:border-gray-700"></th>
-                      </tr>
-                    </thead>
                     <tbody>
-                      {outageList.map((outage) => (
-                        <tr key={outage.id} className="text-customBlue text-nowrap">
-                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.outage_id}</td>
-                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.olt}</td>
-                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.team}</td>
-                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.team_type}</td>
-                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.start_time}</td>
-                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{outage.end_time}</td>
-                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{Math.max(0, (outage.duration / 24)).toFixed(0)}</td>
-                          <td className={`py-2 px-4 border-b border-gray-200 dark:border-gray-700 ${OUTAGE_STATUS_CLASS_MAP[outage.status ? 'Active' : 'Resolved']}`}>{outage.status ? 'Active' : 'Resolved'}</td>
-                          <td className="py-2 px-4 border-b border-gray-200 dark:border-gray-700">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(outage.refund_amount)}</td>
+                      {outageList.map((outage, index) => (
+                        <tr key={outage.id} className={`hover:bg-[var(--table-hover)] rounded-lg border-b border-[var(--border)] text-white ${index === 0 ? 'bg-[var(--even-odd)]' : ''}`}>
+                          <td className="py-2 px-4 rounded-l-lg ">{outage.outage_id}</td>
+                          <td className="py-2 px-4 ">{outage.olt}</td>
+                          <td className="py-2 px-4 ">{outage.team}</td>
+                          <td className="py-2 px-4 ">{outage.team_type}</td>
+                          <td className="py-2 px-4 ">{outage.start_time}</td>
+                          <td className="py-2 px-4 ">{outage.end_time}</td>
+                          <td className="py-2 px-4 ">{Math.max(0, (outage.duration / 24)).toFixed(0)}</td>
+                          <td className={`py-2 px-4 ${OUTAGE_STATUS_CLASS_MAP[outage.status ? 'Active' : 'Resolved']}`}>{outage.status ? 'Active' : 'Resolved'}</td>
+                          <td className="py-2 px-4 rounded-r-lg">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(outage.refund_amount)}</td>
                         </tr>
                       ))}
                     </tbody>

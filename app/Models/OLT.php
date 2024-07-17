@@ -44,6 +44,11 @@ class OLT extends Model
         return $this->belongsTo(Resource::class, 'resource_id', 'resource_id');
     }
 
+    public function customers()
+    {
+        return $this->hasMany(Customer::class, 'town_id', 'town_id');
+    }
+
     public static function boot()
     {
         parent::boot();

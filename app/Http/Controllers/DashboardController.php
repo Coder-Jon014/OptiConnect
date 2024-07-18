@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\OLT;
 use App\Models\SLA;
 use App\Models\Team;
+use App\Models\Customer;
 use App\Models\OutageHistory;
 use Inertia\Inertia;
 
@@ -46,11 +47,15 @@ class DashboardController extends Controller
         $recentOutages = OutageHistory::with('olt', 'team')->latest()->take(10)->get();
         $teamStatus = Team::with('resources')->get();
 
+        // Fetch customers data
+        $customers = Customer::with('olt')->get();
+
         return Inertia::render('Dashboard', [
             'stats' => $stats,
             'recentOutages' => $recentOutages,
             'allOutages' => $allOutages,
             'teamStatus' => $teamStatus,
+            'customers' => $customers,
         ]);
     }
 }

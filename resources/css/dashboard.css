@@ -13,26 +13,21 @@
   
   .MapComponent {
     grid-area: MapComponent;
-    background-color: lightblue; /* Temporary background color */
   }
   
   .OLT-Breakdown {
     grid-area: OLT-Breakdown;
-    background-color: lightcoral; /* Temporary background color */
   }
   
   .Refund-Amount {
     grid-area: Refund-Amount;
-    background-color: lightgreen; /* Temporary background color */
   }
   
   .Teams {
     grid-area: Teams;
-    background-color: lightgoldenrodyellow; /* Temporary background color */
   }
   
   .List-Of-Recent-Outages {
     grid-area: List-Of-Recent-Outages;
-    background-color: lightgray; /* Temporary background color */
   }
   

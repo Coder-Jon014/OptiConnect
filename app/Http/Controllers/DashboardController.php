@@ -15,6 +15,8 @@ class DashboardController extends Controller
     {
         $totalOutages = OutageHistory::count();
         $ongoingOutages = OutageHistory::where('status', 1)->count();
+        // Get total OLT customers which is olt residential customers + olt business customers
+        $totalOLTCustomers = OLT::where('residential_customer_count', '>', 0)->count() + OLT::where('business_customer_count', '>', 0)->count();
 
         // Calculate refunds
         $slaRecords = SLA::with(['outageHistory.olt', 'customerType'])->get();
@@ -41,10 +43,11 @@ class DashboardController extends Controller
             'totalOutages' => $totalOutages,
             'ongoingOutages' => $ongoingOutages,
             'totalRefund' => $totalRefund,
+            'totalOLTCustomers' => $totalOLTCustomers,
         ];
 
         $allOutages = OutageHistory::with('olt', 'team')->get();
-        $recentOutages = OutageHistory::with('olt', 'team')->latest()->take(10)->get();
+        $recentOutages = OutageHistory::with('olt', 'team')->latest()->take(5)->get();
         $teamStatus = Team::with('resources')->get();
 
         // Fetch customers data
@@ -53,7 +56,6 @@ class DashboardController extends Controller
         return Inertia::render('Dashboard', [
             'stats' => $stats,
             'recentOutages' => $recentOutages,
-            'allOutages' => $allOutages,
             'teamStatus' => $teamStatus,
             'customers' => $customers,
         ]);

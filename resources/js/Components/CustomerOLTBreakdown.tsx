@@ -124,12 +124,12 @@ const CustomerOLTBreakdown: React.FC<CustomerOLTBreakdownProps> = ({ customers }
         </div>
         <Select value={activeOLT || ""} onValueChange={(value) => setActiveOLT(value === "all" ? "all" : value)}>
           <SelectTrigger
-            className="ml-auto h-7 w-[130px] rounded-lg pl-2.5 mb-4 mt-1 bg-transparent text-sm font-medium text-white"
+            className="ml-auto h-7 w-[130px] rounded-lg pl-2.5 mb-4 mt-1 bg-transparent text-sm font-medium text-white border-4"
             aria-label="Select OLT"
           >
             <SelectValue placeholder="Select OLT" />
           </SelectTrigger>
-          <SelectContent align="end" className="rounded-xl bg-white p-0">
+          <SelectContent align="end" className="rounded-xl bg-white p-0 border-4">
             <SelectItem
               key="all"
               value="all"
@@ -169,7 +169,7 @@ const CustomerOLTBreakdown: React.FC<CustomerOLTBreakdownProps> = ({ customers }
               data={filteredData}
               dataKey="value"
               nameKey="name"
-              innerRadius={60}
+              innerRadius={80}
               stroke="none"
             >
               <Label

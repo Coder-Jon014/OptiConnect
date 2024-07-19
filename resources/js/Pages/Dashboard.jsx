@@ -4,32 +4,15 @@ import { Head } from '@inertiajs/react';
 import StatisticsCard from '@/Components/StatisticsCard';
 import MapComponent from '@/Components/MapComponent';
 import CustomerOLTBreakdown from '@/Components/CustomerOLTBreakdown';
+import RecentOutages from '@/Components/RecentOutages';
+import TeamsDeployed from '@/Components/TeamsDeployed';
 import { OUTAGE_STATUS_CLASS_MAP, TEAM_STATUS_CLASS_MAP } from '@/constants';
 import { format } from 'date-fns';
 
-const Dashboard = ({ auth, stats, recentOutages, teamStatus, allOutages, customers }) => {
-    // Debugging: Log props to ensure data is received
-    // console.log('Stats:', stats);
-    // console.log('Recent Outages:', recentOutages);
-    // console.log('Team Status:', teamStatus);
-    // console.log('All Outages:', allOutages);
-    console.log('Customers:', customers);
+const Dashboard = ({ auth, stats, teamStatus, recentOutages, customers }) => {
 
-    // Filter OLTs with outages
-    const [filteredOLT, setFilteredOLT] = useState(null);
+    console.log("Stats", stats);
 
-    // Filter OLTs with ongoing outages
-    const handleTowerClick = (oltName) => {
-        setFilteredOLT(filteredOLT === oltName ? null : oltName);
-    };
-
-    // Filter outages by OLT
-    const filteredOutages = filteredOLT
-        ? recentOutages.filter(outage => outage.olt.olt_name === filteredOLT)
-        : recentOutages;
-
-    // Filter OLTs with ongoing outages
-    const ongoingOutages = recentOutages.filter(outage => outage.status);
 
     return (
         <AuthenticatedLayout
@@ -41,20 +24,20 @@ const Dashboard = ({ auth, stats, recentOutages, teamStatus, allOutages, custome
             <div className="py-12">
                 <div className="w-full mx-auto sm:px-6 lg:px-8">
                     <div className="container">
-                        <div className="OLT-Breakdown rounded-lg w-2/3">
+                        <div className="OLT-Breakdown rounded-lg inline-block">
                             <CustomerOLTBreakdown customers={customers} />
                         </div>
                         <div className="Refund-Amount">
                             Refund Amount
                         </div>
                         <div className="MapComponent">
-                            Mapcomponent
+                            <MapComponent title="OLT Deployment Map" />
                         </div>
-                        <div className="Teams">
-                            Teams
+                        <div className="Teams rounded-lg inline-block">
+                            <TeamsDeployed teams={teamStatus} />
                         </div>
-                        <div className="List-Of-Recent-Outages">
-                            List Of Recent Outages
+                        <div className="List-Of-Recent-Outages rounded-lg inline-block">
+                            <RecentOutages outages={recentOutages} />
                         </div>
                     </div>
                 </div>

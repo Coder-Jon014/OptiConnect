@@ -11,6 +11,8 @@ import TableHeading from '@/Components/TableHeading';
 
 export default function Index({ auth, outages, slas, queryParams = null }) {
 
+  console.log(outages);
+
 
   queryParams = queryParams || {};
   const searchFieldChanged = (name, value) => {

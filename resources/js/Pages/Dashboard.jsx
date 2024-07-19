@@ -6,10 +6,11 @@ import MapComponent from '@/Components/MapComponent';
 import CustomerOLTBreakdown from '@/Components/CustomerOLTBreakdown';
 import RecentOutages from '@/Components/RecentOutages';
 import TeamsDeployed from '@/Components/TeamsDeployed';
+import CustomerTypeBreakdown from '@/Components/CustomerTypeBreakdown';
 import { OUTAGE_STATUS_CLASS_MAP, TEAM_STATUS_CLASS_MAP } from '@/constants';
 import { format } from 'date-fns';
 
-const Dashboard = ({ auth, stats, teamStatus, recentOutages, customers }) => {
+const Dashboard = ({ auth, stats, recentOutages, teamStatus, customers, oltData }) => {
 
     console.log("Stats", stats);
 
@@ -28,7 +29,7 @@ const Dashboard = ({ auth, stats, teamStatus, recentOutages, customers }) => {
                             <CustomerOLTBreakdown customers={customers} />
                         </div>
                         <div className="Refund-Amount">
-                            Refund Amount
+                            <CustomerTypeBreakdown oltData={oltData} />
                         </div>
                         <div className="MapComponent">
                             <MapComponent title="OLT Deployment Map" />

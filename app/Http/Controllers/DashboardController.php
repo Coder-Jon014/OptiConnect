@@ -15,8 +15,12 @@ class DashboardController extends Controller
     {
         $totalOutages = OutageHistory::count();
         $ongoingOutages = OutageHistory::where('status', 1)->count();
-        // Get total OLT customers which is olt residential customers + olt business customers
-        $totalOLTCustomers = OLT::where('residential_customer_count', '>', 0)->count() + OLT::where('business_customer_count', '>', 0)->count();
+
+        // Fetch all OLTs
+        $olts = OLT::all();
+
+        // Calculate total OLT customers
+        $totalOLTCustomers = $olts->sum('residential_customer_count') + $olts->sum('business_customer_count');
 
         // Calculate refunds
         $slaRecords = SLA::with(['outageHistory.olt', 'customerType'])->get();
@@ -50,6 +54,16 @@ class DashboardController extends Controller
         $recentOutages = OutageHistory::with('olt', 'team')->latest()->take(5)->get();
         $teamStatus = Team::with('resources')->get();
 
+        // Prepare OLT data for the chart
+        $oltData = $olts->map(function ($olt) {
+            return [
+                'olt' => $olt->olt_name,
+                'customer_count' => $olt->business_customer_count + $olt->residential_customer_count,
+                'business_customer_count' => $olt->business_customer_count,
+                'residential_customer_count' => $olt->residential_customer_count,
+            ];
+        });
+
         // Fetch customers data
         $customers = Customer::with('olt')->get();
 
@@ -58,6 +72,7 @@ class DashboardController extends Controller
             'recentOutages' => $recentOutages,
             'teamStatus' => $teamStatus,
             'customers' => $customers,
+            'oltData' => $oltData,
         ]);
     }
 }

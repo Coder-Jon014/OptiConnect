@@ -65,7 +65,7 @@ type Customer = {
   }
 }
 
-type CustomerOLTBreakdownProps = {
+type OLTPieChartProps = {
   customers: Customer[]
 }
 
@@ -95,7 +95,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-const CustomerOLTBreakdown: React.FC<CustomerOLTBreakdownProps> = ({ customers }) => {
+const OLTPieChart: React.FC<OLTPieChartProps> = ({ customers }) => {
   const [activeOLT, setActiveOLT] = React.useState<string | null>("all");
 
   const data = React.useMemo(() => {
@@ -116,7 +116,7 @@ const CustomerOLTBreakdown: React.FC<CustomerOLTBreakdownProps> = ({ customers }
   const olts = data.map(item => item.name);
 
   return (
-    <Card className="flex flex-col bg-[var(--foreground)] rounded-lg">
+    <Card className="flex flex-col bg-[var(--foreground)] rounded-lg pb-6">
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
           <CardTitle className="text-white">Customer OLT Breakdown</CardTitle>
@@ -221,4 +221,4 @@ const CustomerOLTBreakdown: React.FC<CustomerOLTBreakdownProps> = ({ customers }
   )
 }
 
-export default CustomerOLTBreakdown
+export default OLTPieChart

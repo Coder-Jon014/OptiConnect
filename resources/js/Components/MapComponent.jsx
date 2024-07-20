@@ -51,7 +51,7 @@ const MapComponent = ({ title, onTowerClick }) => {
     };
 
     return (
-        <Card className="bg-[var(--foreground)]">
+        <Card className="bg-[var(--foreground)] pb-6">
             <CardHeader className="px-7">
                 <CardTitle className="text-white">{title}</CardTitle>
                 <CardDescription>Click on the towers to view more details.</CardDescription>

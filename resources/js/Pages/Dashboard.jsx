@@ -3,16 +3,18 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import StatisticsCard from '@/Components/StatisticsCard';
 import MapComponent from '@/Components/MapComponent';
-import CustomerOLTBreakdown from '@/Components/CustomerOLTBreakdown';
+import OLTPieChart from '@/Components/OLTPieChart';
 import RecentOutages from '@/Components/RecentOutages';
 import TeamsDeployed from '@/Components/TeamsDeployed';
-import CustomerTypeBreakdown from '@/Components/CustomerTypeBreakdown';
+import OLTValueBarChart from '@/Components/OLTValueBarChart';
 import { OUTAGE_STATUS_CLASS_MAP, TEAM_STATUS_CLASS_MAP } from '@/constants';
 import { format } from 'date-fns';
 
 const Dashboard = ({ auth, stats, recentOutages, teamStatus, customers, oltData }) => {
 
     console.log("Stats", stats);
+    console.log("Customers", customers);
+    console.log("OLT Data", oltData);
 
 
     return (
@@ -26,10 +28,10 @@ const Dashboard = ({ auth, stats, recentOutages, teamStatus, customers, oltData 
                 <div className="w-full mx-auto sm:px-6 lg:px-8">
                     <div className="container">
                         <div className="OLT-Breakdown rounded-lg inline-block">
-                            <CustomerOLTBreakdown customers={customers} />
+                            <OLTPieChart customers={customers} />
                         </div>
                         <div className="Refund-Amount">
-                            <CustomerTypeBreakdown oltData={oltData} />
+                            <OLTValueBarChart oltData={oltData} />
                         </div>
                         <div className="MapComponent">
                             <MapComponent title="OLT Deployment Map" />

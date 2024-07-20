@@ -61,6 +61,7 @@ class DashboardController extends Controller
                 'customer_count' => $olt->business_customer_count + $olt->residential_customer_count,
                 'business_customer_count' => $olt->business_customer_count,
                 'residential_customer_count' => $olt->residential_customer_count,
+                'olt_value' => $olt->olt_value,
             ];
         });
 

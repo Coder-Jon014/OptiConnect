@@ -116,9 +116,9 @@ const OLTPieChart: React.FC<OLTPieChartProps> = ({ customers }) => {
   const olts = data.map(item => item.name);
 
   return (
-    <Card className="flex flex-col bg-[var(--foreground)] rounded-lg pb-6">
-      <CardHeader className="flex-row items-start space-y-0 pb-0">
-        <div className="grid gap-1">
+    <Card className="flex flex-col bg-[var(--foreground)] rounded-lg pb-8">
+      <CardHeader className="flex-row items-start space-y-0 pb-2">
+        <div className="grid gap-2">
           <CardTitle className="text-white">Customer OLT Breakdown</CardTitle>
           <CardDescription className="text-[var(--table-headings)]">Total number of customers: {totalCustomers}</CardDescription>
         </div>
@@ -209,12 +209,9 @@ const OLTPieChart: React.FC<OLTPieChartProps> = ({ customers }) => {
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
+      <CardFooter className="flex-col gap-2 text-sm pt-10">
         <div className="flex items-center gap-2 font-medium leading-none text-white">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-[var(--table-headings)]">
-          Showing total customers per OLT
+          Distribution of customers across OLTs
         </div>
       </CardFooter>
     </Card>

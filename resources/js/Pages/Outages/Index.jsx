@@ -70,24 +70,24 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
           <div className="mt-4">
             <div className="overflow-hidden shadow-sm sm:rounded-lg">
               <div className="p-6 text-gray-900 dark:text-gray-100">
-              <button
-                onClick={handleGenerateOutage}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 mb-2"
-              >
-                Generate Outage
-              </button>
-              <button
-                onClick={handleStopOutages}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-2"
-              >
-                Stop All Outages
-              </button>
-              <button
-                onClick={handleExportOutageReport}
-                className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded ml-2 mb-2"
-              >
-                Export Outage Report
-              </button>
+                <button
+                  onClick={handleGenerateOutage}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 mb-2"
+                >
+                  Generate Outage
+                </button>
+                <button
+                  onClick={handleStopOutages}
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-2"
+                >
+                  Stop All Outages
+                </button>
+                <button
+                  onClick={handleExportOutageReport}
+                  className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded ml-2 mb-2"
+                >
+                  Export Outage Report
+                </button>
                 <div className="overflow-auto rounded bg-[var(--foreground)] border-2 border-[var(--border)] p-4">
                   <table className="w-full text-sm text-left rtl:text-right text-white">
                     <thead className="text-xs text-[var(--table-headings)] uppercase rounded-t-lg border-b border-[var(--border)]">

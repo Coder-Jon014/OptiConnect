@@ -1,38 +1,57 @@
 /* Dashboard.css */
 .container {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-    gap: 10px 10px;
-    grid-auto-flow: row;
-    grid-template-areas:
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 10px;
+  grid-auto-flow: row;
+  grid-template-areas:
       "OLT-Breakdown OLT-Breakdown Refund-Amount Refund-Amount"
       "MapComponent MapComponent MapComponent Teams"
       "List-Of-Recent-Outages List-Of-Recent-Outages List-Of-Recent-Outages Teams";
+}
+
+.MapComponent {
+  grid-area: MapComponent;
+}
+
+.OLT-Breakdown {
+  grid-area: OLT-Breakdown;
+}
+
+.Refund-Amount {
+  grid-area: Refund-Amount;
+}
+
+.Teams {
+  grid-area: Teams;
+}
+
+.List-Of-Recent-Outages {
+  grid-area: List-Of-Recent-Outages;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 1200px) {
+  .container {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+          "OLT-Breakdown OLT-Breakdown"
+          "Refund-Amount Refund-Amount"
+          "MapComponent MapComponent"
+          "Teams Teams"
+          "List-Of-Recent-Outages List-Of-Recent-Outages";
   }
-  
-  .MapComponent {
-    grid-area: MapComponent;
-    /* background-color: blue; */
+}
+
+@media (max-width: 768px) {
+  .container {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+          "OLT-Breakdown"
+          "Refund-Amount"
+          "MapComponent"
+          "Teams"
+          "List-Of-Recent-Outages";
   }
-  
-  .OLT-Breakdown {
-    grid-area: OLT-Breakdown;
-    /* background-color: green; */
-  }
-  
-  .Refund-Amount {
-    grid-area: Refund-Amount;
-    /* background-color: yellow; */
-  }
-  
-  .Teams {
-    grid-area: Teams;
-    /* background-color: red; */
-  }
-  
-  .List-Of-Recent-Outages {
-    grid-area: List-Of-Recent-Outages;
-    /* background-color: aqua; */
-  }
-  
+}

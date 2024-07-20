@@ -38,9 +38,9 @@ const chartConfig = {
 
 export function OLTValueBarChart({ oltData }) {
   return (
-    <Card className="bg-[var(--foreground)]">
+    <Card className="bg-[var(--foreground)] pb-8">
       <CardHeader>
-        <CardTitle className="text-white">OLT Customer Count</CardTitle>
+        <CardTitle className="text-white">OLT Value Breakdown</CardTitle>
         <CardDescription className="text-[var(--table-headings)]">Showing total OLT value</CardDescription>
       </CardHeader>
       <CardContent>

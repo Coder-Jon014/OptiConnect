@@ -3,23 +3,24 @@ import JamaicaMap from '../assets/jamMap.svg?react';
 import OLTTower from '../assets/oltTower.svg?react';
 import Tooltip from './Tooltip';  // Adjust the import path as necessary
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+    CardFooter,
 } from "@/Components/ui/card";
 
 const towers = [
-    {id: 'OLT Negril', top: '34%', left: '19%'},
-    {id: 'OLT Mandeville', top: '57%', left: '42%'},
-    {id: 'OLT St. Anns Bay', top: '29%', left: '52%'},
-    {id: 'OLT Independence City', top: '68%', left: '59%'},
-    {id: 'OLT Old Harbour', top: '65%', left: '56%'},
-    {id: 'OLT St. Jago', top: '59%', left: '60%'},
-    {id: 'OLT Dumfries', top: '58%', left: '66%'},
-    {id: 'OLT Barbican', top: '57%', left: '69%'},
-    {id: 'OLT Bridgeport', top: '64%', left: '62%'},
+    { id: 'OLT Negril', top: '34%', left: '19%' },
+    { id: 'OLT Mandeville', top: '57%', left: '42%' },
+    { id: 'OLT St. Anns Bay', top: '29%', left: '52%' },
+    { id: 'OLT Independence City', top: '68%', left: '59%' },
+    { id: 'OLT Old Harbour', top: '65%', left: '56%' },
+    { id: 'OLT St. Jago', top: '59%', left: '60%' },
+    { id: 'OLT Dumfries', top: '58%', left: '66%' },
+    { id: 'OLT Barbican', top: '57%', left: '69%' },
+    { id: 'OLT Bridgeport', top: '64%', left: '62%' },
 ];
 
 const MapComponent = ({ title, onTowerClick }) => {
@@ -41,7 +42,7 @@ const MapComponent = ({ title, onTowerClick }) => {
         setTooltip({
             visible: true,
             x: e.clientX - containerRect.left,
-            y: e.clientY - (containerRect.top+10),
+            y: e.clientY - (containerRect.top + 10),
             text: towerId,
         });
     };
@@ -82,6 +83,11 @@ const MapComponent = ({ title, onTowerClick }) => {
                     {tooltip.text}
                 </Tooltip>
             </CardContent>
+            <CardFooter className="flex flex-col items-center text-sm">
+                <div className="flex gap-2 font-medium leading-none text-white">
+                    OLT Distribution across Jamaica
+                </div>
+            </CardFooter>
         </Card>
     );
 };

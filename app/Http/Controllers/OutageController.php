@@ -102,32 +102,46 @@ class OutageController extends Controller
      * Send outage notifications to customers
      */
     private function sendOutageNotifications($olt)
-    {
-        // Fetch customers for the OLT
-        $customers = Customer::where('town_id', $olt->town_id)->get();
+{
+    // List of verified numbers
+    $verifiedNumbers = [
+        '+1234567890',
+        '+1987654321',
+        // Add more verified numbers here
+    ];
 
-        $accountSid = env('TWILIO_ACCOUNT_SID');
-        $authToken = env('TWILIO_AUTH_TOKEN');
-        $twilioNumber = env('TWILIO_PHONE_NUMBER');
-        $client = new Client($accountSid, $authToken);
+    // Fetch customers for the OLT
+    $customers = Customer::where('town_id', $olt->town_id)->get();
 
-        \Log::info("Twilio SID: $accountSid");
-        \Log::info("Twilio Auth Token: $authToken");
-        \Log::info("Twilio Number: $twilioNumber");
+    $accountSid = env('TWILIO_ACCOUNT_SID');
+    $authToken = env('TWILIO_AUTH_TOKEN');
+    $twilioNumber = env('TWILIO_PHONE_NUMBER');
+    $client = new Client($accountSid, $authToken);
 
-        foreach ($customers as $customer) {
-            $message = "Dear customer {$customer->customer_name}, we are currently experiencing an outage at {$olt->olt_name}. Our team is working on it.";
-            $client->messages->create(
-                $customer->telephone,
-                [
-                    'from' => $twilioNumber,
-                    'body' => $message,
-                ]
-            );
-            //log the message sent
-            Log::info("Message sent to {$customer->telephone}");
+    \Log::info("Twilio SID: $accountSid");
+    \Log::info("Twilio Auth Token: $authToken");
+    \Log::info("Twilio Number: $twilioNumber");
+
+    foreach ($customers as $customer) {
+        // Check if the customer's number is in the verified list
+        if (!in_array($customer->telephone, $verifiedNumbers)) {
+            \Log::info("Skipping unverified number: {$customer->telephone}");
+            continue;
         }
+
+        $message = "Dear customer {$customer->customer_name}, we are currently experiencing an outage at {$olt->olt_name}. Our team is working on it.";
+        $client->messages->create(
+            $customer->telephone,
+            [
+                'from' => $twilioNumber,
+                'body' => $message,
+            ]
+        );
+        // Log the message sent
+        \Log::info("Message sent to {$customer->telephone}");
     }
+}
+
 
     public function stopAllOutages(Request $request)
 {

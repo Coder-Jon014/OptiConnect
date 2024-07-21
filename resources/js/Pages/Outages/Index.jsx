@@ -196,15 +196,14 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
                     <tbody>
                       {outageList.map((outage, index) => (
                         <tr key={outage.outage_id} className={`hover:bg-[var(--table-hover)] rounded-lg border-b border-[var(--border)] text-white ${index === 0 ? 'bg-[var(--even-odd)]' : ''}`}>
-                          <td className="py-2 px-4 rounded-l-lg ">
-                            <button
+                          <td className="py-2 px-4 rounded-l-lg ">{outage.outage_id}</td>
+                          <td className="py-2 px-4 ">
+                          <button
                               className="text-white hover:underline"
                               onClick={() => handleOpenDrawer(outage)}
                             >
-                              {outage.outage_id}
-                            </button>
-                          </td>
-                          <td className="py-2 px-4 ">{outage.olt}</td>
+                              {outage.olt}
+                            </button></td>
                           <td className="py-2 px-4 ">{outage.team}</td>
                           <td className="py-2 px-4 ">{outage.team_type}</td>
                           <td className="py-2 px-4 ">{outage.start_time}</td>

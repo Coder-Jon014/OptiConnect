@@ -16,6 +16,7 @@ class SLA extends Model
         'max_duration',
         'compensation_details',
         'outage_history_id',
+        'refund_amount',
     ];
 
     public function outageHistory()

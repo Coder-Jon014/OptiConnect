@@ -25,7 +25,7 @@ class OutageResource extends JsonResource
             "end_time" => (new Carbon($this->end_time))->format('Y-m-d H:i:s'),
             "duration" => $this->duration / 3600,
             "status" => $this->status,
-            "refund_amount" => $this->sla ? $this->sla->refund_amount : 0,
+            "refund_amount" => $this->sla ? $this->sla->refund_amount : 0.00,
         ];
     }
 }

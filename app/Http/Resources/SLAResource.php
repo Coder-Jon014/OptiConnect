@@ -14,7 +14,7 @@ class SLAResource extends JsonResource
             'outage_id' => $this->outage_history_id,
             'max_duration' => $this->max_duration,
             'compensation_details' => $this->compensation_details,
-            'refund_amount' => $this->refund_amount ?? 0, // Ensure refund_amount is included
+            'refund_amount' => $this->refund_amount ?? 0.00, // Ensure refund_amount is included
         ];
     }
 }

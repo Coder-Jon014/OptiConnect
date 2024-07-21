@@ -45,7 +45,7 @@ class SLASeeder extends Seeder
                     $businessRefund = ($outageDurationDays / 30) * 1200 * $businessCustomers;
                     $refundAmount = $residentialRefund + $businessRefund;
                 } else {
-                    $refundAmount = 0;
+                    $refundAmount = 0.00;
                 }
 
                 // Create the SLA record

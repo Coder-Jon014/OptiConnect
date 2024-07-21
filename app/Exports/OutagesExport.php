@@ -19,7 +19,7 @@ class OutagesExport implements FromCollection, WithHeadings, ShouldAutoSize
                 'Start Time' => $outage->start_time,
                 'End Time' => $outage->end_time,
                 'Duration' => $outage->duration,
-                'Refund Amount' => $outage->sla->refund_amount,
+                'Refund Amount' => $outage->sla ? $outage->sla->refund_amount : '0.00',
             ];
         });
     }

@@ -1,18 +1,17 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
 import { Inertia } from '@inertiajs/inertia';
-import { format } from 'date-fns';
 import Pagination from '@/Components/Pagination';
+import OutageDetailsDrawer from '@/Components/OutageDetailsDrawer';
 import { OUTAGE_STATUS_CLASS_MAP } from '@/constants';
-import TextInput from '@/Components/TextInput';
-import SelectInput from '@/Components/SelectInput';
 import TableHeading from '@/Components/TableHeading';
+import axios from 'axios';
 
 export default function Index({ auth, outages, slas, queryParams = null }) {
-
-  console.log(outages);
-
+  const [selectedOutage, setSelectedOutage] = useState(null);
+  const [drawerData, setDrawerData] = useState({ teams: [], outage: null });
+  const [isLoading, setIsLoading] = useState(false);
 
   queryParams = queryParams || {};
   const searchFieldChanged = (name, value) => {
@@ -36,14 +35,13 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
       queryParams.sort_direction = 'asc';
     }
     router.get(route('outage.index'), queryParams);
-  }
+  };
 
   const onKeyPress = (name, e) => {
     if (e.key !== 'Enter') return;
     searchFieldChanged(name, e.target.value);
   };
 
-  // Ensure outages is an array
   const outageList = outages.data || [];
 
   const handleGenerateOutage = () => {
@@ -56,7 +54,36 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
 
   const handleExportOutageReport = () => {
     Inertia.get('/outages/report');
-  }
+  };
+
+  const handleOpenDrawer = async (outage) => {
+    console.log("handleOpenDrawer", outage);
+    setSelectedOutage(outage);
+    setIsLoading(true);
+    try {
+      const response = await axios.get(route('outage.teamsWithOLTResource', { outage_id: outage.outage_id }));
+      console.log("response.data", response.data);
+      setDrawerData(response.data);
+    } catch (error) {
+      console.error("Failed to fetch drawer data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCloseDrawer = () => {
+    setSelectedOutage(null);
+    setDrawerData({ teams: [], outage: null });
+  };
+
+  const handleSave = (teamId) => {
+    Inertia.post('/outages/reassign', {
+      outage_id: selectedOutage.outage_id,
+      team_id: teamId,
+    }).then(() => {
+      setSelectedOutage(null);
+    });
+  };
 
   return (
     <AuthenticatedLayout
@@ -168,8 +195,15 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
                     </thead>
                     <tbody>
                       {outageList.map((outage, index) => (
-                        <tr key={outage.id} className={`hover:bg-[var(--table-hover)] rounded-lg border-b border-[var(--border)] text-white ${index === 0 ? 'bg-[var(--even-odd)]' : ''}`}>
-                          <td className="py-2 px-4 rounded-l-lg ">{outage.outage_id}</td>
+                        <tr key={outage.outage_id} className={`hover:bg-[var(--table-hover)] rounded-lg border-b border-[var(--border)] text-white ${index === 0 ? 'bg-[var(--even-odd)]' : ''}`}>
+                          <td className="py-2 px-4 rounded-l-lg ">
+                            <button
+                              className="text-white hover:underline"
+                              onClick={() => handleOpenDrawer(outage)}
+                            >
+                              {outage.outage_id}
+                            </button>
+                          </td>
                           <td className="py-2 px-4 ">{outage.olt}</td>
                           <td className="py-2 px-4 ">{outage.team}</td>
                           <td className="py-2 px-4 ">{outage.team_type}</td>
@@ -189,6 +223,15 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
           </div>
         </div>
       </div>
+      {selectedOutage && (
+        <OutageDetailsDrawer
+          data={drawerData}
+          isOpen={!!selectedOutage}
+          onClose={handleCloseDrawer}
+          onSave={handleSave}
+          isLoading={isLoading}
+        />
+      )}
     </AuthenticatedLayout>
   );
 }

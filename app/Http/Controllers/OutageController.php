@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\OutageHistory;
 use App\Http\Resources\OutageResource;
+use App\Http\Resources\TeamResource;
 use Inertia\Inertia;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -56,8 +57,10 @@ class OutageController extends Controller
 
         // Paginate outages
         $outages = $query->paginate(10)->onEachSide(1);
+        $teams = TeamResource::collection(Team::all());
 
         return Inertia::render('Outages/Index', [
+            "teams" => $teams,
             "outages" => OutageResource::collection($outages),
             'queryParams' => $request->query() ?: null,
         ]);
@@ -184,4 +187,80 @@ class OutageController extends Controller
         $pdf->save($path);
         return $path;
     }
+
+    public function teamsWithOLTResource(Request $request)
+    {
+        // Log the request
+        Log::info("Request received for outage teams with OLT resource");
+        Log::info("Outage ID: {$request->input('outage_id')}");
+        
+        // Validate the outage_id
+        $request->validate([
+            'outage_id' => 'required|exists:outage_histories,id',
+        ]);
+    
+        // Find the outage
+        $outage = OutageHistory::find($request->input('outage_id'));
+    
+        if (!$outage) {
+            return response()->json(['error' => 'Outage not found'], 404);
+        }
+    
+        // Find the OLT related to the outage
+        $olt = OLT::find($outage->olt_id);
+    
+        if (!$olt) {
+            return response()->json(['error' => 'OLT not found'], 404);
+        }
+    
+        // Retrieve teams with resources matching the OLT's resource_id
+        $teams = Team::whereHas('resources', function ($query) use ($olt) {
+            $query->where('resources.resource_id', $olt->resource_id);
+        })->get();
+
+        //Just log the teams
+        Log::info("Teams with OLT Resource ID: {$teams}");
+        Log::info("Outage ID: {$outage}");
+    
+        return response()->json([
+            'teams' => TeamResource::collection($teams),
+            'outage' => new OutageResource($outage),
+        ]);
+    }
+    
+
+
+
+
+
+    public function reassignTeam(Request $request)
+    {
+        $request->validate([
+            'outage_id' => 'required|exists:outage_histories,id',
+            'team_id' => 'required|exists:teams,team_id',
+        ]);
+
+        $outage = OutageHistory::find($request->outage_id);
+        $newTeam = Team::find($request->team_id);
+
+        if ($outage && $newTeam) {
+            // Set the current team to inactive
+            $currentTeam = Team::find($outage->team_id);
+            if ($currentTeam) {
+                $currentTeam->status = false;
+                $currentTeam->save();
+            }
+
+            // Assign the new team
+            $outage->team_id = $newTeam->team_id;
+            $outage->save();
+
+            // Set the new team to active
+            $newTeam->status = true;
+            $newTeam->save();
+        }
+
+        return Redirect::back()->with('success', 'Team reassigned successfully');
+    }
+
 }

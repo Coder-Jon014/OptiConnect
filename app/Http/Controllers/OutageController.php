@@ -108,8 +108,9 @@ class OutageController extends Controller
 {
     // List of verified numbers
     $verifiedNumbers = [
-        '+1234567890',
-        '+1987654321',
+        '18762922254',
+        '18765528469',
+        '18764653933',
         // Add more verified numbers here
     ];
 
@@ -121,14 +122,10 @@ class OutageController extends Controller
     $twilioNumber = env('TWILIO_PHONE_NUMBER');
     $client = new Client($accountSid, $authToken);
 
-    \Log::info("Twilio SID: $accountSid");
-    \Log::info("Twilio Auth Token: $authToken");
-    \Log::info("Twilio Number: $twilioNumber");
 
     foreach ($customers as $customer) {
         // Check if the customer's number is in the verified list
         if (!in_array($customer->telephone, $verifiedNumbers)) {
-            \Log::info("Skipping unverified number: {$customer->telephone}");
             continue;
         }
 
@@ -140,8 +137,6 @@ class OutageController extends Controller
                 'body' => $message,
             ]
         );
-        // Log the message sent
-        \Log::info("Message sent to {$customer->telephone}");
     }
 }
 
@@ -190,10 +185,6 @@ class OutageController extends Controller
 
     public function teamsWithOLTResource(Request $request)
     {
-        // Log the request
-        Log::info("Request received for outage teams with OLT resource");
-        Log::info("Outage ID: {$request->input('outage_id')}");
-        
         // Validate the outage_id
         $request->validate([
             'outage_id' => 'required|exists:outage_histories,id',
@@ -218,10 +209,6 @@ class OutageController extends Controller
             $query->where('resources.resource_id', $olt->resource_id);
         })->get();
 
-        //Just log the teams
-        Log::info("Teams with OLT Resource ID: {$teams}");
-        Log::info("Outage ID: {$outage}");
-    
         return response()->json([
             'teams' => TeamResource::collection($teams),
             'outage' => new OutageResource($outage),

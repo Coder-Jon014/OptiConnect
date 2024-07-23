@@ -1,9 +1,12 @@
 {
     "private": true,
     "type": "module",
+    "homepage": "https://Coder-Jon014.github.io/OptiConnect",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "predeploy": "vite build",
+        "deploy": "gh-pages -d dist"
     },
     "devDependencies": {
         "@headlessui/react": "^2.0.0",
@@ -12,6 +15,7 @@
         "@vitejs/plugin-react": "^4.2.0",
         "autoprefixer": "^10.4.12",
         "axios": "^1.6.4",
+        "gh-pages": "^6.1.1",
         "laravel-vite-plugin": "^1.0",
         "postcss": "^8.4.31",
         "react": "^18.2.0",

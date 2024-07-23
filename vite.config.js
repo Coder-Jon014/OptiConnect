@@ -11,5 +11,10 @@ export default defineConfig({
         }),
         react(),
         svgr(),
+        
     ],
+    base: '/OptiConnect/',
+    build: {
+        outDir: 'dist', // This is the default, ensure it is set correctly
+      },
 });

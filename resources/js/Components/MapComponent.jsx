@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useMemo } from 'react';
-import JamaicaMap from '../assets/jamMap.svg?react';
+import JamaicaMap from '../assets/jamMap.optimized.svg?react';
 import OLTTower from '../assets/oltTower.svg?react';
 import Tooltip from './Tooltip';  // Adjust the import path as necessary
 import {

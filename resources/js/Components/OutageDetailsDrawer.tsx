@@ -35,7 +35,6 @@ import {
 } from "@/Components/ui/command";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { toast } from "@/Components/ui/use-toast";
 
 const FormSchema = z.object({
     team: z.number({
@@ -74,14 +73,14 @@ const OutageDetailsDrawer = ({ data, isOpen, onClose, onSave, isLoading }) => {
                 </DrawerHeader>
                 <div className="p-4 grid grid-cols-2 gap-4">
                     <p className='text-white'><strong>Outage ID:</strong> {outage.outage_id}</p>
-                    <p className='text-white'><strong>OLT:</strong> {outage.olt}</p>
-                    <p className='text-white'><strong>Team:</strong> {outage.team}</p>
-                    <p className='text-white'><strong>Team Type:</strong> {outage.team_type}</p>
+                    <p className='text-white'><strong>OLT:</strong> {outage.olt.olt_name}</p>
+                    <p className='text-white'><strong>Team:</strong> {outage.team.team_name}</p>
+                    <p className='text-white'><strong>Team Type:</strong> {outage.team.team_type}</p>
                     <p className='text-white'><strong>Start Time:</strong> {outage.start_time}</p>
                     <p className='text-white'><strong>End Time:</strong> {outage.end_time}</p>
                     <p className='text-white'><strong>Duration:</strong> {Math.max(0, (outage.duration / 24)).toFixed(0)} days</p>
                     <p className='text-white'><strong>Status:</strong> {outage.status ? 'Active' : 'Resolved'}</p>
-                    <p className='text-white'><strong>Refund Amount:</strong> {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(outage.refund_amount)}</p>
+                    <p className='text-white'><strong>Refund Amount:</strong> {outage.sla ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(outage.sla.refund_amount) : 'N/A'}</p>
                 </div>
                 {outage.status === 1 && (
                 <Form {...form}>

@@ -10,11 +10,10 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->bigIncrements('customer_id');
-            $table->string('customer_name');
-            $table->string('telephone');
-            // $table->unsignedBigInteger('town_id');
-            $table->foreignId('town_id')->references('town_id')->on('towns')->onDelete('cascade');
-            $table->unsignedBigInteger('customer_type_id');
+            $table->string('customer_name')->index(); // Adding index for customer_name
+            $table->string('telephone')->index(); // Adding index for telephone
+            $table->foreignId('town_id')->constrained('towns', 'town_id')->onDelete('cascade')->index(); // Adding index for town_id
+            $table->unsignedBigInteger('customer_type_id')->index(); // Adding index for customer_type_id
             $table->foreign('customer_type_id')->references('customer_type_id')->on('customer_types')->onDelete('cascade');
             $table->timestamps();
         });
@@ -25,4 +24,3 @@ class CreateCustomersTable extends Migration
         Schema::dropIfExists('customers');
     }
 }
-

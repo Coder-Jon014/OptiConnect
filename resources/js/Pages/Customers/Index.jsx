@@ -1,27 +1,22 @@
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, router } from "@inertiajs/react";
-import TextInput from "@/Components/TextInput";
-import SelectInput from "@/Components/SelectInput";
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/16/solid"
 import TableHeading from "@/Components/TableHeading";
-import { Tab } from "@headlessui/react";
-
+import { useCallback, useMemo } from "react";
 
 export default function Index({ auth, customers, queryParams = null }) {
     queryParams = queryParams || {};
 
-
-    const searchFieldChanged = (name, value) => {
+    const searchFieldChanged = useCallback((name, value) => {
         if (value) {
             queryParams[name] = value;
         } else {
             delete queryParams[name];
         }
         router.get(route('customer.index'), queryParams);
-    };
+    }, [queryParams]);
 
-    const sortChanged = (name) => {
+    const sortChanged = useCallback((name) => {
         if (name === queryParams.sort_field) {
             queryParams.sort_direction = queryParams.sort_direction === 'asc' ? 'desc' : 'asc';
         } else {
@@ -29,19 +24,18 @@ export default function Index({ auth, customers, queryParams = null }) {
             queryParams.sort_direction = 'asc';
         }
         router.get(route('customer.index'), queryParams);
-    }
+    }, [queryParams]);
 
-    const onKeyPress = (name, e) => {
+    const onKeyPress = useCallback((name, e) => {
         if (e.key !== 'Enter') return;
         searchFieldChanged(name, e.target.value);
-    };
+    }, [searchFieldChanged]);
 
-    const handleExport = () => {
+    const handleExport = useCallback(() => {
         window.location.href = route('customers.export');
-    };
+    }, []);
 
-    // Ensure customers is an array
-    const customerList = customers.data || [];
+    const customerList = useMemo(() => customers.data || [], [customers.data]);
 
     return (
         <AuthenticatedLayout
@@ -52,8 +46,7 @@ export default function Index({ auth, customers, queryParams = null }) {
             <Head title="Customers" />
             <div className="py-8">
                 <div className="m-10 rounded-xl sm:px-6 lg:px-8">
-                    <div className=" overflow-hidden shadow-sm sm:rounded-lg">
-
+                    <div className="overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <button
                                 onClick={handleExport}
@@ -111,7 +104,6 @@ export default function Index({ auth, customers, queryParams = null }) {
                                     </thead>
                                     <tbody>
                                         {customerList.map((customer, index) => (
-                                            //just give the first child bg-[var(--even-odd)]
                                             <tr key={customer.customer_id} className={`hover:bg-[var(--table-hover)] border-b border-[var(--border)] rounded-full text-white ${index === 0 ? 'bg-[var(--even-odd)]' : ''}`}>
                                                 <td className="py-2 px-4 rounded-l-lg ">{customer.customer_id}</td>
                                                 <td className="py-2 px-4 ">{customer.customer_name}</td>

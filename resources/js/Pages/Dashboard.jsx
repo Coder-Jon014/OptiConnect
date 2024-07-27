@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import StatisticsCard from '@/Components/StatisticsCard';
@@ -8,18 +8,15 @@ import RecentOutages from '@/Components/RecentOutages';
 import TeamsDeployed from '@/Components/TeamsDeployed';
 import OLTValueBarChart from '@/Components/OLTValueBarChart';
 import { AlertDestructive } from '@/Components/AlerWarning';
-import { OUTAGE_STATUS_CLASS_MAP, TEAM_STATUS_CLASS_MAP } from '@/constants';
+import { OUTAGE_STATUS_CLASS_MAP } from '@/constants';
 import { format } from 'date-fns';
 
 const Dashboard = ({ auth, stats, recentOutages, teamStatus, customers, oltData }) => {
 
-    console.log("Stats", stats);
-    console.log("Customers", customers);
-    console.log("OLT Data", oltData);
-
-    // Filter ongoing outages
-    const ongoingOutages = recentOutages.filter(outage => outage.status === 1);
-    console.log("Ongoing Outages", ongoingOutages);
+    // Memoize filtered ongoing outages
+    const ongoingOutages = useMemo(() => {
+        return recentOutages.filter(outage => outage.status === 1);
+    }, [recentOutages]);
 
     return (
         <AuthenticatedLayout
@@ -30,7 +27,6 @@ const Dashboard = ({ auth, stats, recentOutages, teamStatus, customers, oltData 
             <Head title="Dashboard" />
             <div className="py-12">
                 <div className="w-full mx-auto sm:px-6 lg:px-8">
-                    {/* Generate alerts for each ongoing outage */}
                     {ongoingOutages.map((outage, index) => (
                         <AlertDestructive
                             key={index}

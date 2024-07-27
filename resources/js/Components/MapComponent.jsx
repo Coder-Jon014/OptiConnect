@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
 import JamaicaMap from '../assets/jamMap.svg?react';
 import OLTTower from '../assets/oltTower.svg?react';
 import Tooltip from './Tooltip';  // Adjust the import path as necessary
@@ -10,6 +10,7 @@ import {
     CardDescription,
     CardFooter,
 } from "@/Components/ui/card";
+import '@/assets/Map.css';
 
 const towers = [
     { id: 'OLT Negril', top: '34%', left: '19%' },
@@ -23,33 +24,45 @@ const towers = [
     { id: 'OLT Bridgeport', top: '64%', left: '62%' },
 ];
 
-const MapComponent = ({ title, onTowerClick }) => {
+const MapComponent = React.memo(({ title, onTowerClick }) => {
     const [activeTower, setActiveTower] = useState(null);
-    const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, text: '' });
+    const tooltipRef = useRef(null);
     const containerRef = useRef(null);
 
-    const handleTowerClick = (towerId) => {
-        if (activeTower === towerId) {
-            setActiveTower(null);
-        } else {
-            setActiveTower(towerId);
-        }
+    const handleTowerClick = useCallback((towerId) => {
+        setActiveTower(prevTower => prevTower === towerId ? null : towerId);
         onTowerClick(towerId);
-    };
+    }, [onTowerClick]);
 
-    const handleMouseOver = (e, towerId) => {
+    const handleMouseOver = useCallback((e, towerId) => {
         const containerRect = containerRef.current.getBoundingClientRect();
-        setTooltip({
-            visible: true,
-            x: e.clientX - containerRect.left,
-            y: e.clientY - (containerRect.top + 10),
-            text: towerId,
-        });
-    };
+        tooltipRef.current.style.left = `${e.clientX - containerRect.left}px`;
+        tooltipRef.current.style.top = `${e.clientY - containerRect.top + 10}px`;
+        tooltipRef.current.innerText = towerId;
+        tooltipRef.current.style.display = 'block';
+    }, []);
 
-    const handleMouseOut = () => {
-        setTooltip({ visible: false, x: 0, y: 0, text: '' });
-    };
+    const handleMouseOut = useCallback(() => {
+        tooltipRef.current.style.display = 'none';
+    }, []);
+
+    const memoizedTowers = useMemo(() => towers.map(tower => (
+        <OLTTower
+            key={tower.id}
+            id={tower.id}
+            onClick={() => handleTowerClick(tower.id)}
+            onMouseOver={(e) => handleMouseOver(e, tower.id)}
+            onMouseOut={handleMouseOut}
+            className={`tower ${tower.id}`}
+            style={{
+                position: 'absolute',
+                top: tower.top,
+                left: tower.left,
+                fill: activeTower === tower.id ? 'red' : 'white',
+                cursor: 'pointer'
+            }}
+        />
+    )), [handleTowerClick, handleMouseOver, handleMouseOut, activeTower]);
 
     return (
         <Card className="bg-[var(--foreground)] pb-6">
@@ -60,28 +73,9 @@ const MapComponent = ({ title, onTowerClick }) => {
             <CardContent className="relative" ref={containerRef}>
                 <div style={{ width: '100%', height: 'auto', marginBottom: '10px' }} className="overflow-hidden">
                     <JamaicaMap style={{ width: '100%', height: 'auto' }} />
-                    {towers.map((tower) => (
-                        <OLTTower
-                            key={tower.id}
-                            id={tower.id}
-                            onClick={() => handleTowerClick(tower.id)}
-                            onMouseOver={(e) => handleMouseOver(e, tower.id)}
-                            onMouseOut={handleMouseOut}
-                            style={{
-                                position: 'absolute',
-                                top: tower.top,
-                                left: tower.left,
-                                width: '28px',
-                                height: '28px',
-                                fill: activeTower === tower.id ? 'red' : 'white',
-                                cursor: 'pointer'
-                            }}
-                        />
-                    ))}
+                    {memoizedTowers}
                 </div>
-                <Tooltip visible={tooltip.visible} x={tooltip.x} y={tooltip.y}>
-                    {tooltip.text}
-                </Tooltip>
+                <Tooltip ref={tooltipRef} />
             </CardContent>
             <CardFooter className="flex flex-col items-center text-sm">
                 <div className="flex gap-2 font-medium leading-none text-white">
@@ -90,6 +84,6 @@ const MapComponent = ({ title, onTowerClick }) => {
             </CardFooter>
         </Card>
     );
-};
+});
 
 export default MapComponent;

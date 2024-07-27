@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class OutageHistory extends Model
 {
     use HasFactory;
+    
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'olt_id',

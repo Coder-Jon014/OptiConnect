@@ -1,24 +1,13 @@
 import React from 'react';
+import '@/assets/Map.css';
 
 const Tooltip = ({ children, x, y, visible }) => {
   if (!visible) return null;
   return (
-    <div style={{
-      position: 'absolute',
-      top: y,
-      left: x,
-      transform: 'translate(-50%, -100%)',
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-      color: 'white',
-      padding: '5px 10px',
-      borderRadius: '4px',
-      pointerEvents: 'none',
-      whiteSpace: 'nowrap',
-      zIndex: 1000,
-    }}>
+    <div className="tooltip" style={{ top: y, left: x }}>
       {children}
     </div>
   );
 };
 
-export default Tooltip;
+export default React.memo(Tooltip);

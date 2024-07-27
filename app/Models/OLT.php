@@ -34,6 +34,11 @@ class OLT extends Model
         return $this->belongsTo(Parish::class, 'parish_id', 'parish_id');
     }
 
+    public function outages()
+    {
+        return $this->hasMany(OutageHistory::class, 'olt_id');
+    }
+
     public function town()
     {
         return $this->belongsTo(Town::class, 'town_id');

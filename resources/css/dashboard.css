@@ -11,6 +11,11 @@
       "List-Of-Recent-Outages List-Of-Recent-Outages List-Of-Recent-Outages Teams";
 }
 
+.tower {
+  width: 28px;
+  height: 28px;
+}
+
 .MapComponent {
   grid-area: MapComponent;
 }

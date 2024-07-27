@@ -11,6 +11,8 @@ class SLA extends Model
 
     protected $table = 'slas'; // Ensure this matches the table name in the migration
 
+    protected $primaryKey = 'id';
+
     protected $fillable = [
         'customer_type_id',
         'max_duration',

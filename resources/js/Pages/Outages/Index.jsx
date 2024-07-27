@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
-import { Inertia } from '@inertiajs/inertia';
 import Pagination from '@/Components/Pagination';
 import OutageDetailsDrawer from '@/Components/OutageDetailsDrawer';
 import { OUTAGE_STATUS_CLASS_MAP } from '@/constants';
@@ -14,6 +13,7 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
   const [isLoading, setIsLoading] = useState(false);
 
   queryParams = queryParams || {};
+
   const searchFieldChanged = (name, value) => {
     if (value) {
       queryParams[name] = value;
@@ -25,11 +25,7 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
 
   const sortChanged = (name) => {
     if (name === queryParams.sort_field) {
-      if (queryParams.sort_direction === 'asc') {
-        queryParams.sort_direction = 'desc';
-      } else {
-        queryParams.sort_direction = 'asc';
-      }
+      queryParams.sort_direction = queryParams.sort_direction === 'asc' ? 'desc' : 'asc';
     } else {
       queryParams.sort_field = name;
       queryParams.sort_direction = 'asc';
@@ -57,12 +53,10 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
   };
 
   const handleOpenDrawer = async (outage) => {
-    console.log("handleOpenDrawer", outage);
     setSelectedOutage(outage);
     setIsLoading(true);
     try {
       const response = await axios.get(route('outage.teamsWithOLTResource', { outage_id: outage.outage_id }));
-      console.log("response.data", response.data);
       setDrawerData(response.data);
     } catch (error) {
       console.error("Failed to fetch drawer data:", error);
@@ -198,12 +192,13 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
                         <tr key={outage.outage_id} className={`hover:bg-[var(--table-hover)] rounded-lg border-b border-[var(--border)] text-white ${index === 0 ? 'bg-[var(--even-odd)]' : ''}`}>
                           <td className="py-2 px-4 rounded-l-lg ">{outage.outage_id}</td>
                           <td className="py-2 px-4 ">
-                          <button
+                            <button
                               className="text-white hover:underline"
                               onClick={() => handleOpenDrawer(outage)}
                             >
                               {outage.olt}
-                            </button></td>
+                            </button>
+                          </td>
                           <td className="py-2 px-4 ">{outage.team}</td>
                           <td className="py-2 px-4 ">{outage.team_type}</td>
                           <td className="py-2 px-4 ">{outage.start_time}</td>

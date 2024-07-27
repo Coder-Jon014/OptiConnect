@@ -16,8 +16,8 @@ class DashboardController extends Controller
         $totalOutages = OutageHistory::count();
         $ongoingOutages = OutageHistory::where('status', 1)->count();
 
-        // Fetch all OLTs
-        $olts = OLT::all();
+        // Fetch all OLTs with necessary relationships
+        $olts = OLT::with(['outages', 'customers'])->get();
 
         // Calculate total OLT customers
         $totalOLTCustomers = $olts->sum('residential_customer_count') + $olts->sum('business_customer_count');
@@ -41,8 +41,9 @@ class DashboardController extends Controller
             }
         }
 
+        // Collect stats
         $stats = [
-            'totalOlts' => OLT::count(),
+            'totalOlts' => $olts->count(),
             'totalTeams' => Team::count(),
             'totalOutages' => $totalOutages,
             'ongoingOutages' => $ongoingOutages,
@@ -50,8 +51,9 @@ class DashboardController extends Controller
             'totalOLTCustomers' => $totalOLTCustomers,
         ];
 
-        $allOutages = OutageHistory::with('olt', 'team')->get();
-        $recentOutages = OutageHistory::with('olt', 'team')->latest()->take(5)->get();
+        // Fetch outages with necessary relationships
+        $allOutages = OutageHistory::with(['olt', 'team'])->get();
+        $recentOutages = OutageHistory::with(['olt', 'team'])->latest()->take(5)->get();
         $teamStatus = Team::with('resources')->get();
 
         // Prepare OLT data for the chart
@@ -65,7 +67,7 @@ class DashboardController extends Controller
             ];
         });
 
-        // Fetch customers data
+        // Fetch customers data with necessary relationships
         $customers = Customer::with('olt')->get();
 
         return Inertia::render('Dashboard', [

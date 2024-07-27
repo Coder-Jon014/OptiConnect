@@ -15,22 +15,57 @@ class CustomerController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // public function index()
+    // {
+    //     $query = Customer::query(); // Get all customers
+    //     $sortField = request("sort_field", "customer_name");
+    //     $sortDirection = request("sort_direction", "asc");
+    
+    //     if (request("name")){
+    //         $query->where("customer_name", "LIKE", "%".request("name")."%");
+    //     }
+    //     if (request("town")) {
+    //         $query->whereHas('town', function($q) {
+    //             $q->where('town_name', 'LIKE', '%' . request('town') . '%');
+    //         });
+    //     }
+    
+    //     // Handle sorting fields
+    //     if ($sortField === 'town') {
+    //         $query->join('towns', 'customers.town_id', '=', 'towns.town_id')
+    //               ->select('customers.*')
+    //               ->orderBy('towns.town_name', $sortDirection);
+    //     } elseif ($sortField === 'customer_type') {
+    //         $query->join('customer_types', 'customers.customer_type_id', '=', 'customer_types.customer_type_id')
+    //               ->select('customers.*')
+    //               ->orderBy('customer_types.customer_type_name', $sortDirection);
+    //     } else {
+    //         $query->orderBy($sortField, $sortDirection);
+    //     }
+    
+    //     // Paginate customers
+    //     $customers = $query->paginate(10)->onEachSide(1);
+    
+    //     return inertia('Customers/Index', [
+    //         "customers" => CustomerResource::collection($customers),
+    //         'queryParams' => request()->query() ?: null,
+    //     ]);
+    // }
     public function index()
     {
-        $query = Customer::query(); // Get all customers
+        $query = Customer::with(['town', 'customerType']); // Eager load relationships
         $sortField = request("sort_field", "customer_name");
         $sortDirection = request("sort_direction", "asc");
-    
-        if (request("name")){
-            $query->where("customer_name", "LIKE", "%".request("name")."%");
+
+        if (request("name")) {
+            $query->where("customer_name", "LIKE", "%" . request("name") . "%");
         }
         if (request("town")) {
-            $query->whereHas('town', function($q) {
+            $query->whereHas('town', function ($q) {
                 $q->where('town_name', 'LIKE', '%' . request('town') . '%');
             });
         }
-    
-        // Handle sorting fields
+
         if ($sortField === 'town') {
             $query->join('towns', 'customers.town_id', '=', 'towns.town_id')
                   ->select('customers.*')
@@ -42,15 +77,15 @@ class CustomerController extends Controller
         } else {
             $query->orderBy($sortField, $sortDirection);
         }
-    
-        // Paginate customers
+
         $customers = $query->paginate(10)->onEachSide(1);
-    
+
         return inertia('Customers/Index', [
             "customers" => CustomerResource::collection($customers),
             'queryParams' => request()->query() ?: null,
         ]);
     }
+
 
     public function export()
     {

@@ -114,6 +114,7 @@ private function sendOutageNotifications($olt)
         '18762922254',
         '18765528469',
         '18764653933',
+        '18763477662',
     ];
 
     $customers = Customer::where('town_id', $olt->town_id)

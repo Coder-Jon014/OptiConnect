@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             ResourceSeeder::class,
             TeamSeeder::class,
             CustomerTypeSeeder::class,
-            CustomerSeeder::class,
+            // CustomerSeeder::class,
             OLTSeeder::class,
             OutageHistorySeeder::class,
             SLASeeder::class,

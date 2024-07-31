@@ -11,8 +11,11 @@ use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
+    
     public function index()
     {
+        ini_set('memory_limit', '1024M');
+
         $totalOutages = OutageHistory::count();
         $ongoingOutages = OutageHistory::where('status', 1)->count();
 

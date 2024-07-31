@@ -1,5 +1,6 @@
 "use client"
 import * as React from "react";
+import { formatValue } from "@/Components/formatValue";
 import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, LabelList, XAxis, YAxis, Cell, CartesianGrid } from "recharts";
 import {
@@ -24,6 +25,7 @@ const COLORS = {
   'OLT Independence City': '#FEB019',
   'Unknown': '#888888',
 };
+
 
 const chartConfig = {
   olt: {
@@ -66,7 +68,7 @@ export function OLTValueBarChart({ oltData }) {
               angle={-45} 
               textAnchor="end" 
             />
-            <YAxis type="number" tickLine={true} axisLine={true} stroke="#18181b" />
+            <YAxis type="number" tickLine={true} axisLine={true} stroke="#18181b" domain={[0, (dataMax) => Math.ceil(dataMax * 4.5)]}  />
             <ChartTooltip
               cursor={false}
               content={
@@ -84,14 +86,14 @@ export function OLTValueBarChart({ oltData }) {
                           // marginRight: '0px',
                         }}
                       ></span>
-                      {props.payload.olt}: ${value.toLocaleString()}
+                      {props.payload.olt}: ${formatValue(value)}
                     </div>
                   )}
                 />
               }
             />
             <Bar dataKey="olt_value" radius={[4, 4, 4, 4]}>
-              <LabelList dataKey="olt_value" position="top" offset={10} className="text-white" fontSize={12} formatter={(value) => `$${value.toLocaleString()}`} />
+              <LabelList dataKey="olt_value" position="top" offset={10} className="text-white" fontSize={12} formatter={(value) => `$${formatValue(value)}`} />
               {oltData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[entry.olt] || COLORS['Unknown']} />
               ))}

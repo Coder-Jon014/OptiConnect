@@ -32,12 +32,12 @@ export function TeamsDeployed({ teams }) {
               <TableHead>Name</TableHead>
               <TableHead className="text-right">Status</TableHead>
             </TableRow>
-          </TableHeader>
+          </TableHeader>  
           <TableBody>
             {teams.map((team, index) => (
               <TableRow key={index} className="bg-[var(--foreground)]">
                 <TableCell>
-                  <div className="font-medium text-white">{team.team_name}</div>
+                  <div className="font-medium text-white">{team.team_name} {team.team_type}</div>
                 </TableCell>
                 <TableCell className="text-right">
                   <Badge className="text-xs text-white outline" variant={team.status ? "secondary" : "outline"}>

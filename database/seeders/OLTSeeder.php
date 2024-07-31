@@ -15,14 +15,14 @@ class OLTSeeder extends Seeder
         
         $olts = [
             ['olt_name' => 'OLT Negril', 'parish_id' => 1, 'town_id' => 1, 'rank' => 6],
-            ['olt_name' => 'OLT St. Anns Bay', 'parish_id' => 4, 'town_id' => 2, 'rank' => 9],
-            ['olt_name' => 'OLT Mandeville', 'parish_id' => 5, 'town_id' => 3, 'rank' => 8],
-            ['olt_name' => 'OLT Old Harbor', 'parish_id' => 2, 'town_id' => 4, 'rank' => 7],
-            ['olt_name' => 'OLT St. Jago', 'parish_id' => 2, 'town_id' => 5, 'rank' => 3],
-            ['olt_name' => 'OLT Bridgeport', 'parish_id' => 2, 'town_id' => 6, 'rank' => 2],
-            ['olt_name' => 'OLT Dumfries', 'parish_id' => 3, 'town_id' => 7, 'rank' => 1],
-            ['olt_name' => 'OLT Barbican', 'parish_id' => 3, 'town_id' => 8, 'rank' => 4],
-            ['olt_name' => 'OLT Independence City', 'parish_id' => 2, 'town_id' => 9, 'rank' => 5],
+            ['olt_name' => 'OLT St. Anns Bay', 'parish_id' => 4, 'town_id' => 4, 'rank' => 9],
+            ['olt_name' => 'OLT Mandeville', 'parish_id' => 5, 'town_id' => 5, 'rank' => 8],
+            ['olt_name' => 'OLT Old Harbor', 'parish_id' => 2, 'town_id' => 6, 'rank' => 7],
+            ['olt_name' => 'OLT St. Jago', 'parish_id' => 2, 'town_id' => 7, 'rank' => 3],
+            ['olt_name' => 'OLT Bridgeport', 'parish_id' => 2, 'town_id' => 8, 'rank' => 2],
+            ['olt_name' => 'OLT Dumfries', 'parish_id' => 3, 'town_id' => 9, 'rank' => 1],
+            ['olt_name' => 'OLT Barbican', 'parish_id' => 3, 'town_id' => 3, 'rank' => 4],
+            ['olt_name' => 'OLT Independence City', 'parish_id' => 2, 'town_id' => 2, 'rank' => 5],
         ];
 
         foreach ($olts as $oltData) {

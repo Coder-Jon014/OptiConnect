@@ -24,7 +24,7 @@ const towers = [
     { id: 'OLT Bridgeport', top: '64%', left: '62%' },
 ];
 
-const MapComponent = React.memo(({ title, onTowerClick }) => {
+const MapComponent = React.memo(({ title, onTowerClick, ongoingOutages }) => {
     const [activeTower, setActiveTower] = useState(null);
     const tooltipRef = useRef(null);
     const containerRef = useRef(null);
@@ -46,23 +46,26 @@ const MapComponent = React.memo(({ title, onTowerClick }) => {
         tooltipRef.current.style.display = 'none';
     }, []);
 
-    const memoizedTowers = useMemo(() => towers.map(tower => (
-        <OLTTower
-            key={tower.id}
-            id={tower.id}
-            onClick={() => handleTowerClick(tower.id)}
-            onMouseOver={(e) => handleMouseOver(e, tower.id)}
-            onMouseOut={handleMouseOut}
-            className={`tower ${tower.id}`}
-            style={{
-                position: 'absolute',
-                top: tower.top,
-                left: tower.left,
-                fill: activeTower === tower.id ? 'red' : 'white',
-                cursor: 'pointer'
-            }}
-        />
-    )), [handleTowerClick, handleMouseOver, handleMouseOut, activeTower]);
+    const memoizedTowers = useMemo(() => towers.map(tower => {
+        const isOngoingOutage = ongoingOutages.some(outage => outage.olt.olt_name === tower.id);
+        return (
+            <OLTTower
+                key={tower.id}
+                id={tower.id}
+                onClick={() => handleTowerClick(tower.id)}
+                onMouseOver={(e) => handleMouseOver(e, tower.id)}
+                onMouseOut={handleMouseOut}
+                className={`tower ${tower.id}`}
+                style={{
+                    position: 'absolute',
+                    top: tower.top,
+                    left: tower.left,
+                    fill: isOngoingOutage ? 'red' : 'white',
+                    cursor: 'pointer'
+                }}
+            />
+        );
+    }), [handleTowerClick, handleMouseOver, handleMouseOut, ongoingOutages]);
 
     return (
         <Card className="bg-[var(--foreground)] pb-6">

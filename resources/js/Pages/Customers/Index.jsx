@@ -31,9 +31,9 @@ export default function Index({ auth, customers, queryParams = null }) {
         searchFieldChanged(name, e.target.value);
     }, [searchFieldChanged]);
 
-    const handleExport = useCallback(() => {
-        window.location.href = route('customers.export');
-    }, []);
+    const handleExport = () => {
+        window.location.href = '/customers/export';
+      };
 
     const customerList = useMemo(() => customers.data || [], [customers.data]);
 

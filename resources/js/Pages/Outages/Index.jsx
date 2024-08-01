@@ -41,15 +41,15 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
   const outageList = outages.data || [];
 
   const handleGenerateOutage = () => {
-    Inertia.post('/outages/generate');
+    router.post(route('outages.generate'));
   };
 
   const handleStopOutages = () => {
-    Inertia.post('/outages/stop-all');
+    router.post(route('outages.stopAll'));
   };
 
   const handleExportOutageReport = () => {
-    Inertia.get('/outages/report');
+    window.location.href = '/outages/report';
   };
 
   const handleOpenDrawer = async (outage) => {
@@ -114,7 +114,7 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
                     <thead className="text-xs text-[var(--table-headings)] uppercase rounded-t-lg border-b border-[var(--border)]">
                       <tr>
                         <TableHeading
-                          name="outage_id"
+                          name="id"
                           sort_direction={queryParams.sort_direction}
                           sort_field={queryParams.sort_field}
                           sortChanged={sortChanged}

@@ -1,13 +1,13 @@
 <?php
-
 namespace App\Exports;
 
 use App\Models\Customer;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 
-class CustomersExport implements FromQuery, WithHeadings, ShouldAutoSize
+class CustomersExport implements FromQuery, WithHeadings, ShouldAutoSize, WithChunkReading
 {
     public function query()
     {
@@ -27,5 +27,10 @@ class CustomersExport implements FromQuery, WithHeadings, ShouldAutoSize
             'Town',
             'Customer Type'
         ];
+    }
+
+    public function chunkSize(): int
+    {
+        return 5000; // Adjust the chunk size as needed
     }
 }

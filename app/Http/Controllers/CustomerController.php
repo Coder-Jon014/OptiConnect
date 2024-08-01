@@ -89,6 +89,7 @@ class CustomerController extends Controller
 
     public function export()
     {
+        set_time_limit(0); // Remove the time limit
         return Excel::download(new CustomersExport, 'customers.xlsx');
     }
         

@@ -9,7 +9,7 @@ import {
 
 export function AlertDestructive({ header, message }) {
     return (
-      <Alert variant="destructive" className="mb-4">
+      <Alert variant="destructive" className="mb-4 bg-[var(--destructive-foreground)] text-red-500">
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>{header}</AlertTitle>
         <AlertDescription>{message}</AlertDescription>

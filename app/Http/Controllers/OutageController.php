@@ -7,10 +7,10 @@ use App\Http\Resources\OutageResource;
 use App\Http\Resources\TeamResource;
 use Inertia\Inertia;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Redirect;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\OutagesExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Request;
 use Twilio\Rest\Client;
 use App\Models\OLT;
 use App\Models\Team;
@@ -102,18 +102,18 @@ public function generateOutage(Request $request)
 
     $team->update(['status' => true]);
 
-    $this->sendOutageNotifications($olt);
+    $this->sendNewOutageNotifications($olt);
 
     return Redirect::back()->with('success', 'Outage generated successfully');
 }
 
 
-private function sendOutageNotifications($olt)
+private function sendNewOutageNotifications($olt)
 {
     $verifiedNumbers = [
         '18762922254',
         '18765528469',
-        '18764653933',
+        '18763368664',
         '18763477662',
     ];
 
@@ -138,6 +138,37 @@ private function sendOutageNotifications($olt)
     }
 }
 
+private function sendOutageEndNotifications($olt)
+{
+    $verifiedNumbers = [
+        '18762922254',
+        '18765528469',
+        '18763368664',
+        '18763477662',
+    ];
+
+    $customers = Customer::where('town_id', $olt->town_id)
+                        ->whereIn('telephone', $verifiedNumbers)
+                        ->get();
+
+    $accountSid = env('TWILIO_ACCOUNT_SID');
+    $authToken = env('TWILIO_AUTH_TOKEN');
+    $twilioNumber = env('TWILIO_PHONE_NUMBER');
+    $client = new Client($accountSid, $authToken);
+
+    foreach ($customers as $customer) {
+        $message = "Dear customer {$customer->customer_name}, the outage at {$olt->olt_name} has been resolved. Thank you for your patience.";
+        $client->messages->create(
+            $customer->telephone,
+            [
+                'from' => $twilioNumber,
+                'body' => $message,
+            ]
+        );
+    }
+}
+
+
 
 
 public function stopAllOutages(Request $request)
@@ -157,16 +188,21 @@ public function stopAllOutages(Request $request)
         if ($outage->team) {
             $outage->team->update(['status' => false]);
         }
+
+        $this->sendOutageEndNotifications($outage->olt); // Send end notifications
     }
 
     return Redirect::back()->with('success', 'All outages stopped successfully');
 }
 
+
     public function generateOutageReport()
     {
         return Excel::download(new OutagesExport, 'outages_report.xlsx');
-        
     }
+
+
+
 
     private function createOutageReport($outages)
     {

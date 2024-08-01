@@ -11,12 +11,13 @@ import { AlertDestructive } from '@/Components/AlerWarning';
 import { OUTAGE_STATUS_CLASS_MAP } from '@/constants';
 import { format } from 'date-fns';
 
-const Dashboard = ({ auth, stats, recentOutages, teamStatus, customers, oltData }) => {
+const Dashboard = ({ auth, recentOutages, teamStatus, oltData }) => {
 
     // Memoize filtered ongoing outages
     const ongoingOutages = useMemo(() => {
-        return recentOutages.filter(outage => outage.status === 1);
+        return recentOutages.filter(outage => outage.status === true);
     }, [recentOutages]);
+    
 
     return (
         <AuthenticatedLayout
@@ -36,13 +37,13 @@ const Dashboard = ({ auth, stats, recentOutages, teamStatus, customers, oltData 
                     ))}
                     <div className="container">
                         <div className="OLT-Breakdown rounded-lg inline-block">
-                            <OLTPieChart customers={customers} />
+                            <OLTPieChart oltData={oltData} />
                         </div>
                         <div className="Refund-Amount">
                             <OLTValueBarChart oltData={oltData} />
                         </div>
                         <div className="MapComponent">
-                            <MapComponent title="OLT Deployment Map" />
+                        <MapComponent title="OLT Deployment Map" ongoingOutages={ongoingOutages} onTowerClick={() => {}} />
                         </div>
                         <div className="Teams rounded-lg inline-block">
                             <TeamsDeployed teams={teamStatus} />

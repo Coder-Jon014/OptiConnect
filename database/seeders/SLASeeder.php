@@ -44,9 +44,14 @@ class SLASeeder extends Seeder
                     $residentialRefund = ($outageDurationDays / 30) * 32 * $residentialCustomers;
                     $businessRefund = ($outageDurationDays / 30) * 1200 * $businessCustomers;
                     $refundAmount = $residentialRefund + $businessRefund;
+                    $resolutionDetails = 'Outage was not resolved within the SLA';
                 } else {
                     $refundAmount = 0.00;
+                    $resolutionDetails = 'Outage was resolved within the SLA';
                 }
+
+                // Update Outage Resolution Details
+                $outage->update(['resolution_details' => $resolutionDetails]);
 
                 // Create the SLA record
                 SLA::create([

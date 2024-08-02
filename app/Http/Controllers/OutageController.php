@@ -15,6 +15,7 @@ use Twilio\Rest\Client;
 use App\Models\OLT;
 use App\Models\Team;
 use App\Models\Customer;
+use App\Models\SLA;
 use Illuminate\Support\Facades\Log;
 
 class OutageController extends Controller
@@ -71,129 +72,183 @@ class OutageController extends Controller
             'queryParams' => $request->query() ?: null,
         ]);
     }
-        
-    
 
 
-public function generateOutage(Request $request)
-{
-    $olt = OLT::where('customer_count', '>', 0)->inRandomOrder()->first();
 
-    if (!$olt) {
-        return response()->json(['message' => 'No OLT with customers found'], 404);
+    private function calculateAndSaveSLA($outage)
+    {
+        $olt = OLT::find($outage->olt_id);
+
+        if ($olt) { // Ensure OLT exists
+            $businessCustomers = Customer::where('town_id', $olt->town_id)
+                                        ->where('customer_type_id', 2)
+                                        ->count();
+            $residentialCustomers = Customer::where('town_id', $olt->town_id)
+                                            ->where('customer_type_id', 1)
+                                            ->count();
+
+            // Convert duration to hours and round to the nearest two decimal places
+            $maxDuration = round($outage->duration / 3600);
+            //24
+
+            if ($businessCustomers > 0 && $maxDuration >= 24) {
+                $compensationDetails = 'Refund';
+            } elseif ($residentialCustomers > 0 && $maxDuration >= 72) {
+                $compensationDetails = 'Refund';
+            } else {
+                $compensationDetails = 'No Refund';
+            }
+
+            // Process SLA for refund calculation
+            if ($compensationDetails == 'Refund') {
+                $outageDurationDays = round($maxDuration / 24); // Convert duration from hours to days
+                $residentialRefund = ($outageDurationDays / 30) * 32 * $residentialCustomers;
+                $businessRefund = ($outageDurationDays / 30) * 1200 * $businessCustomers;
+                $refundAmount = $residentialRefund + $businessRefund;
+                $resolutionDetails = 'Outage was not resolved within the SLA';
+            } else {
+                $refundAmount = 0.00;
+                $resolutionDetails = 'Outage was resolved within the SLA';
+            }
+
+            //Update Outage Resolution Details
+            $outage->update(['resolution_details' => $resolutionDetails]);
+
+            // Create the SLA record
+            SLA::create([
+                'customer_type_id' => $businessCustomers > 0 ? 2 : 1, // 2 for Business, 1 for Residential
+                'max_duration' => $maxDuration,
+                'compensation_details' => $compensationDetails,
+                'outage_history_id' => $outage->id, // Link SLA to outage history
+                'refund_amount' => $refundAmount,
+            ]);
+        }
     }
 
-    $resourceId = $olt->resource_id;
 
-    $team = Team::whereHas('resources', function ($query) use ($resourceId) {
-        $query->where('resources.resource_id', $resourceId);
-    })->where('status', 0)->first();
+    public function generateOutage(Request $request)
+    {
+        $olt = OLT::where('customer_count', '>', 0)->inRandomOrder()->first();
 
-    if (!$team) {
-        return response()->json(['message' => 'No team available'], 404);
-    }
-
-    $outage = OutageHistory::create([
-        'olt_id' => $olt->olt_id,
-        'team_id' => $team->team_id,
-        'start_time' => now(),
-        'status' => true,
-    ]);
-
-    $team->update(['status' => true]);
-
-    $this->sendNewOutageNotifications($olt);
-
-    return Redirect::back()->with('success', 'Outage generated successfully');
-}
-
-
-private function sendNewOutageNotifications($olt)
-{
-    $verifiedNumbers = [
-        '18762922254',
-        '18765528469',
-        '18763368664',
-        '18763477662',
-    ];
-
-    $customers = Customer::where('town_id', $olt->town_id)
-                        ->whereIn('telephone', $verifiedNumbers)
-                        ->get();
-
-    $accountSid = env('TWILIO_ACCOUNT_SID');
-    $authToken = env('TWILIO_AUTH_TOKEN');
-    $twilioNumber = env('TWILIO_PHONE_NUMBER');
-    $client = new Client($accountSid, $authToken);
-
-    foreach ($customers as $customer) {
-        $message = "Dear customer {$customer->customer_name}, we are currently experiencing an outage at {$olt->olt_name}. Our team is working on it.";
-        $client->messages->create(
-            $customer->telephone,
-            [
-                'from' => $twilioNumber,
-                'body' => $message,
-            ]
-        );
-    }
-}
-
-private function sendOutageEndNotifications($olt)
-{
-    $verifiedNumbers = [
-        '18762922254',
-        '18765528469',
-        '18763368664',
-        '18763477662',
-    ];
-
-    $customers = Customer::where('town_id', $olt->town_id)
-                        ->whereIn('telephone', $verifiedNumbers)
-                        ->get();
-
-    $accountSid = env('TWILIO_ACCOUNT_SID');
-    $authToken = env('TWILIO_AUTH_TOKEN');
-    $twilioNumber = env('TWILIO_PHONE_NUMBER');
-    $client = new Client($accountSid, $authToken);
-
-    foreach ($customers as $customer) {
-        $message = "Dear customer {$customer->customer_name}, the outage at {$olt->olt_name} has been resolved. Thank you for your patience.";
-        $client->messages->create(
-            $customer->telephone,
-            [
-                'from' => $twilioNumber,
-                'body' => $message,
-            ]
-        );
-    }
-}
-
-
-
-
-public function stopAllOutages(Request $request)
-{
-    $ongoingOutages = OutageHistory::where('status', true)->get();
-
-    foreach ($ongoingOutages as $outage) {
-        $endTime = now();
-        $duration = $endTime->getTimestamp() - (new \DateTime($outage->start_time))->getTimestamp();
-
-        $outage->update([
-            'end_time' => $endTime,
-            'duration' => $duration,
-            'status' => false,
-        ]);
-
-        if ($outage->team) {
-            $outage->team->update(['status' => false]);
+        if (!$olt) {
+            return response()->json(['message' => 'No OLT with customers found'], 404);
         }
 
-        $this->sendOutageEndNotifications($outage->olt); // Send end notifications
+        $resourceId = $olt->resource_id;
+
+        $team = Team::whereHas('resources', function ($query) use ($resourceId) {
+            $query->where('resources.resource_id', $resourceId);
+        })->where('status', 0)->first();
+
+        if (!$team) {
+            return response()->json(['message' => 'No team available'], 404);
+        }
+
+        $outage = OutageHistory::create([
+            'olt_id' => $olt->olt_id,
+            'team_id' => $team->team_id,
+            'start_time' => now(),
+            'status' => true,
+        ]);
+
+        $team->update(['status' => true]);
+
+        $this->sendNewOutageNotifications($olt);
+
+        // Calculate and save SLA
+        $this->calculateAndSaveSLA($outage);
+
+        return Redirect::back()->with('success', 'Outage generated successfully');
     }
 
-    return Redirect::back()->with('success', 'All outages stopped successfully');
-}
+
+    private function sendNewOutageNotifications($olt)
+    {
+        $verifiedNumbers = [
+            '18762922254',
+            '18765528469',
+            '18763368664',
+            '18763477662',
+        ];
+
+        $customers = Customer::where('town_id', $olt->town_id)
+                            ->whereIn('telephone', $verifiedNumbers)
+                            ->get();
+
+        $accountSid = env('TWILIO_ACCOUNT_SID');
+        $authToken = env('TWILIO_AUTH_TOKEN');
+        $twilioNumber = env('TWILIO_PHONE_NUMBER');
+        $client = new Client($accountSid, $authToken);
+
+        foreach ($customers as $customer) {
+            $message = "Dear customer {$customer->customer_name}, we are currently experiencing an outage at {$olt->olt_name}. Our team is working on it.";
+            $client->messages->create(
+                $customer->telephone,
+                [
+                    'from' => $twilioNumber,
+                    'body' => $message,
+                ]
+            );
+        }
+    }
+
+    private function sendOutageEndNotifications($olt)
+    {
+        $verifiedNumbers = [
+            '18762922254',
+            '18765528469',
+            '18763368664',
+            '18763477662',
+        ];
+
+        $customers = Customer::where('town_id', $olt->town_id)
+                            ->whereIn('telephone', $verifiedNumbers)
+                            ->get();
+
+        $accountSid = env('TWILIO_ACCOUNT_SID');
+        $authToken = env('TWILIO_AUTH_TOKEN');
+        $twilioNumber = env('TWILIO_PHONE_NUMBER');
+        $client = new Client($accountSid, $authToken);
+
+        foreach ($customers as $customer) {
+            $message = "Dear customer {$customer->customer_name}, the outage at {$olt->olt_name} has been resolved. Thank you for your patience.";
+            $client->messages->create(
+                $customer->telephone,
+                [
+                    'from' => $twilioNumber,
+                    'body' => $message,
+                ]
+            );
+        }
+    }
+
+
+
+
+    public function stopAllOutages(Request $request)
+    {
+        $ongoingOutages = OutageHistory::where('status', true)->get();
+
+        foreach ($ongoingOutages as $outage) {
+            $endTime = now();
+            $duration = $endTime->getTimestamp() - (new \DateTime($outage->start_time))->getTimestamp();
+
+            $outage->update([
+                'end_time' => $endTime,
+                'duration' => $duration,
+                'status' => false,
+            ]);
+
+            if ($outage->team) {
+                $outage->team->update(['status' => false]);
+            }
+
+            $this->sendOutageEndNotifications($outage->olt); // Send end notifications
+            $this->calculateAndSaveSLA($outage); // Calculate and save SLA
+        }
+
+        return Redirect::back()->with('success', 'All outages stopped successfully');
+    }
 
 
     public function generateOutageReport()

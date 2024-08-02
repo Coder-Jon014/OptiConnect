@@ -28,19 +28,29 @@ class DashboardController extends Controller
         // Calculate refunds
         $slaRecords = SLA::with(['outageHistory.olt', 'customerType'])->get();
         $totalRefund = 0;
+        $totalNoRefund = 0;
 
         foreach ($slaRecords as $sla) {
-            if ($sla->compensation_details === 'Refund') {
-                $durationInDays = $sla->outageHistory->duration / 86400; // Convert seconds to days
-                $olt = $sla->outageHistory->olt;
+            // sum up refund amount for each SLA
+             $totalRefund += $sla->refund_amount;
 
-                if ($sla->customerType->customer_type_name === 'Residential') {
-                    $refundAmount = ($durationInDays / 30) * $olt->residential_customer_value * $olt->residential_customer_count;
-                } else if ($sla->customerType->customer_type_name === 'Business') {
-                    $refundAmount = ($durationInDays / 30) * $olt->business_customer_value * $olt->business_customer_count;
-                }
+             if ($sla->compensation_details == 'No Refund') {
+                 $totalNoRefund += 1;
+             }
+        }
 
-                $totalRefund += $refundAmount;
+        //Days since last outage, first check if there is an ongoing outage
+        if ($ongoingOutages) {
+            $durationInDays = 0;
+        } else {
+            // Find the most recent resolved outage
+            $lastResolvedOutage = OutageHistory::where('status', false)->latest()->first();
+            
+            if ($lastResolvedOutage) {
+                // Calculate days since the last resolved outage, rounding down to nearest day
+                $durationInDays = floor((time() - $lastResolvedOutage->created_at->timestamp) / 86400);
+            } else {
+                $durationInDays = 0;
             }
         }
 
@@ -52,6 +62,8 @@ class DashboardController extends Controller
             'ongoingOutages' => $ongoingOutages,
             'totalRefund' => $totalRefund,
             'totalOLTCustomers' => $totalOLTCustomers,
+            'daysSinceLastOutage' => $durationInDays,
+            'totalNoRefund' => $totalNoRefund,
         ];
 
         // Fetch outages with necessary relationships

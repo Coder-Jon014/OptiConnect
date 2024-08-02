@@ -3,20 +3,24 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import StatisticsCard from '@/Components/StatisticsCard';
 import MapComponent from '@/Components/MapComponent';
+import NumbersCard from '@/Components/NumbersCard';
 import OLTPieChart from '@/Components/OLTPieChart';
 import RecentOutages from '@/Components/RecentOutages';
 import TeamsDeployed from '@/Components/TeamsDeployed';
 import OLTValueBarChart from '@/Components/OLTValueBarChart';
 import { AlertDestructive } from '@/Components/AlerWarning';
+import { formatValue } from '@/Components/formatValue';
 import { OUTAGE_STATUS_CLASS_MAP } from '@/constants';
 import { format } from 'date-fns';
 
-const Dashboard = ({ auth, recentOutages, teamStatus, oltData }) => {
+const Dashboard = ({ auth, recentOutages, teamStatus, oltData, stats }) => {
 
     // Memoize filtered ongoing outages
     const ongoingOutages = useMemo(() => {
         return recentOutages.filter(outage => outage.status === true);
     }, [recentOutages]);
+    console.log(stats);
+
     
 
     return (
@@ -36,10 +40,22 @@ const Dashboard = ({ auth, recentOutages, teamStatus, oltData }) => {
                         />
                     ))}
                     <div className="container">
+                        <div className="Number-Card-1 rounded-lg inline-block">
+                            <NumbersCard title="Total Number of Outages this Month" value={stats.totalOutages} description="Total outages occurred this month" />
+                        </div>
+                        <div className="Number-Card-2 rounded-lg inline-block">
+                            <NumbersCard title="Days Since The Last Outage" value={stats.daysSinceLastOutage} description="Days since last outage" />
+                        </div>
+                        <div className="Number-Card-3 rounded-lg inline-block">
+                            <NumbersCard title="Total Refund for This Month" value={formatValue(stats.totalRefund)} other='USD' description="Total refund for this month" />
+                        </div>
+                        <div className="Number-Card-4 rounded-lg inline-block">
+                            <NumbersCard title="Total Outages Solved Within SLA" value={stats.totalNoRefund} description="Total outages solved within SLA" />
+                        </div>
                         <div className="OLT-Breakdown rounded-lg inline-block">
                             <OLTPieChart oltData={oltData} />
                         </div>
-                        <div className="Refund-Amount">
+                        <div className="OLT-Value-Breakdown">
                             <OLTValueBarChart oltData={oltData} />
                         </div>
                         <div className="MapComponent">

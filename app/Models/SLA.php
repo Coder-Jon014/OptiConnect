@@ -19,6 +19,7 @@ class SLA extends Model
         'compensation_details',
         'outage_history_id',
         'refund_amount',
+        'team_id'
     ];
 
     public function outageHistory()
@@ -29,5 +30,10 @@ class SLA extends Model
     public function customerType()
     {
         return $this->belongsTo(CustomerType::class, 'customer_type_id');
+    }
+
+    public function team()
+    {
+        return $this->belongsTo(Team::class, 'team_id');
     }
 }

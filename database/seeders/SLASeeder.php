@@ -38,6 +38,9 @@ class SLASeeder extends Seeder
                     $compensationDetails = 'No Refund';
                 }
 
+                // Get team assigned to outage
+                $teamAssignedToOutage = $outage->team_id;
+
                 // Process SLA for refund calculation
                 if ($compensationDetails == 'Refund') {
                     $outageDurationDays = round($maxDuration / 24); // Convert duration from hours to days
@@ -60,6 +63,7 @@ class SLASeeder extends Seeder
                     'compensation_details' => $compensationDetails,
                     'outage_history_id' => $outage->id, // Link SLA to outage history
                     'refund_amount' => $refundAmount,
+                    'team_id' => $teamAssignedToOutage,
                 ]);
             }
         }

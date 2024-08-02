@@ -89,7 +89,9 @@ class OutageController extends Controller
 
             // Convert duration to hours and round to the nearest two decimal places
             $maxDuration = round($outage->duration / 3600);
-            //24
+            
+            // Get team assigned to outage
+            $teamAssignedToOutage = $outage->team_id;
 
             if ($businessCustomers > 0 && $maxDuration >= 24) {
                 $compensationDetails = 'Refund';
@@ -121,6 +123,7 @@ class OutageController extends Controller
                 'compensation_details' => $compensationDetails,
                 'outage_history_id' => $outage->id, // Link SLA to outage history
                 'refund_amount' => $refundAmount,
+                'team_id' => $teamAssignedToOutage,
             ]);
         }
     }

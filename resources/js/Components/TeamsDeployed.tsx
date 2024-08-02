@@ -19,6 +19,8 @@ import {
 import { TEAM_STATUS_CLASS_MAP } from "@/constants"
 
 export function TeamsDeployed({ teams }) {
+  // Pick out the active teams only 
+  const activeTeams = teams.filter((team) => team.status)
   return (
     <Card className="bg-[var(--foreground)]">
       <CardHeader className="px-7">
@@ -34,7 +36,7 @@ export function TeamsDeployed({ teams }) {
             </TableRow>
           </TableHeader>  
           <TableBody>
-            {teams.map((team, index) => (
+            {activeTeams.map((team, index) => (
               <TableRow key={index} className="bg-[var(--foreground)]">
                 <TableCell>
                   <div className="font-medium text-white">{team.team_name} {team.team_type}</div>

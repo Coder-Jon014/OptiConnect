@@ -30,6 +30,8 @@ class DashboardController extends Controller
         $totalRefund = 0;
         $totalNoRefund = 0;
 
+        
+
         foreach ($slaRecords as $sla) {
             // sum up refund amount for each SLA
              $totalRefund += $sla->refund_amount;
@@ -38,6 +40,14 @@ class DashboardController extends Controller
                  $totalNoRefund += 1;
              }
         }
+
+        // Calculate number of times a team has been assigned to an outage
+        $numberofTimeTeamdeployed = SLA::groupBy('team_id')
+        ->selectRaw('team_id, COUNT(*) as timesDeployed')
+        ->get()
+        ->toArray();
+
+        
 
         //Days since last outage, first check if there is an ongoing outage
         if ($ongoingOutages) {
@@ -64,6 +74,7 @@ class DashboardController extends Controller
             'totalOLTCustomers' => $totalOLTCustomers,
             'daysSinceLastOutage' => $durationInDays,
             'totalNoRefund' => $totalNoRefund,
+            'numberofTimeTeamdeployed' => $numberofTimeTeamdeployed,
         ];
 
         // Fetch outages with necessary relationships

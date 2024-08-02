@@ -6,6 +6,7 @@ import MapComponent from '@/Components/MapComponent';
 import NumbersCard from '@/Components/NumbersCard';
 import OLTPieChart from '@/Components/OLTPieChart';
 import RecentOutages from '@/Components/RecentOutages';
+import NumberOfTimesTeamDeployedChart from '@/Components/NumberOfTimesTeamDeployedChart';
 import TeamsDeployed from '@/Components/TeamsDeployed';
 import OLTValueBarChart from '@/Components/OLTValueBarChart';
 import { AlertDestructive } from '@/Components/AlerWarning';
@@ -66,6 +67,9 @@ const Dashboard = ({ auth, recentOutages, teamStatus, oltData, stats }) => {
                         </div>
                         <div className="List-Of-Recent-Outages rounded-lg inline-block">
                             <RecentOutages outages={recentOutages} />
+                        </div>
+                        <div className="Number-Of-Times-Deployed rounded-lg inline-block">
+                            <NumberOfTimesTeamDeployedChart data={stats.numberofTimeTeamdeployed} />
                         </div>
                     </div>
                 </div>

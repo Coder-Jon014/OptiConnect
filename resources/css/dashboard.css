@@ -9,7 +9,7 @@
       "Number-Card-1 Number-Card-2 Number-Card-3 Number-Card-4"
       "OLT-Breakdown OLT-Breakdown Refund-Amount Refund-Amount"
       "MapComponent MapComponent MapComponent Teams"
-      "List-Of-Recent-Outages List-Of-Recent-Outages List-Of-Recent-Outages Teams";
+      "List-Of-Recent-Outages List-Of-Recent-Outages Number-Of-Times-Deployed Number-Of-Times-Deployed";
 }
 
 .tower {
@@ -73,6 +73,10 @@
   grid-area: Number-Card-4;
 }
 
+.Number-Of-Times-Deployed {
+  grid-area: Number-Of-Times-Deployed; 
+}
+
 /* Responsive layout for smaller screens */
 @media (max-width: 1200px) {
   .container {
@@ -84,7 +88,10 @@
           "Refund-Amount Refund-Amount"
           "MapComponent MapComponent"
           "Teams Teams"
-          "List-Of-Recent-Outages List-Of-Recent-Outages";
+          "Teams-Most-Active Teams-Most-Active"
+          "List-Of-Recent-Outages List-Of-Recent-Outages"
+          "Number-Of-Times-Deployed Number-Of-Times-Deployed";
+
   }
 }
 
@@ -100,6 +107,7 @@
           "Refund-Amount"
           "MapComponent"
           "Teams"
-          "List-Of-Recent-Outages";
+          "List-Of-Recent-Outages"
+          "Number-Of-Times-Deployed";
   }
 }

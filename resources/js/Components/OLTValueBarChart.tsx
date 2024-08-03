@@ -1,4 +1,3 @@
-"use client"
 import * as React from "react";
 import { formatValue } from "@/Components/formatValue";
 import { TrendingUp } from "lucide-react";

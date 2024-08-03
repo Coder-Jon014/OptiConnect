@@ -1,4 +1,3 @@
-"use client"
 import * as React from "react"
 import { Badge } from "@/Components/ui/badge"
 import {

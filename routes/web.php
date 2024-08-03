@@ -27,6 +27,10 @@ Route::middleware(['auth', 'verified']) ->group(function() {
     Route::get('/outages/report', [OutageController::class, 'generateOutageReport'])->name('outages.report');
     Route::post('/outages/reassign', [OutageController::class, 'reassignTeam'])->name('outage.reassign');
     Route::get('/outages/teamsWithOLTResource', [OutageController::class, 'teamsWithOLTResource'])->name('outage.teamsWithOLTResource');
+    Route::get('/test-db', function () {
+        return \App\Models\OLT::all();
+    });
+    
     
 
 });

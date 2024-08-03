@@ -1,12 +1,9 @@
 {
     "private": true,
     "type": "module",
-    "homepage": "https://Coder-Jon014.github.io/OptiConnect",
     "scripts": {
         "dev": "vite",
-        "build": "vite build",
-        "predeploy": "vite build",
-        "deploy": "gh-pages -d dist"
+        "build": "vite build --outDir=public/dist"
     },
     "devDependencies": {
         "@headlessui/react": "^2.0.0",

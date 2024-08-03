@@ -13,8 +13,8 @@ export default defineConfig({
         svgr(),
         
     ],
-    base: '/OptiConnect/',
     build: {
-        outDir: 'dist', // This is the default, ensure it is set correctly
-      },
+        outDir: 'public/build',
+        emptyOutDir: true,
+    },
 });

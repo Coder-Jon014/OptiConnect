@@ -100,7 +100,6 @@ class DashboardController extends Controller
             'stats' => $stats,
             'recentOutages' => $recentOutages,
             'teamStatus' => $teamStatus,
-            // 'customers' => $customers,
             'oltData' => $oltData,
         ]);
     }

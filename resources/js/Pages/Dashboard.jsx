@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import StatisticsCard from '@/Components/StatisticsCard';
 import MapComponent from '@/Components/MapComponent';
 import NumbersCard from '@/Components/NumbersCard';
 import OLTPieChart from '@/Components/OLTPieChart';
@@ -11,8 +10,7 @@ import TeamsDeployed from '@/Components/TeamsDeployed';
 import OLTValueBarChart from '@/Components/OLTValueBarChart';
 import { AlertDestructive } from '@/Components/AlerWarning';
 import { formatValue } from '@/Components/formatValue';
-import { OUTAGE_STATUS_CLASS_MAP } from '@/constants';
-import { format } from 'date-fns';
+
 
 const Dashboard = ({ auth, recentOutages, teamStatus, oltData, stats }) => {
 
@@ -20,7 +18,7 @@ const Dashboard = ({ auth, recentOutages, teamStatus, oltData, stats }) => {
     const ongoingOutages = useMemo(() => {
         return recentOutages.filter(outage => outage.status === true);
     }, [recentOutages]);
-    console.log(stats);
+    // console.log(stats);
 
     
 

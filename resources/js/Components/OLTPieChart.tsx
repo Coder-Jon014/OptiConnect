@@ -56,10 +56,15 @@ type OLTPieChartProps = {
 const OLTPieChart: React.FC<OLTPieChartProps> = ({ oltData }) => {
   const [activeOLT, setActiveOLT] = React.useState<string | null>('all');
 
-  const filteredData = activeOLT === 'all' ? oltData : oltData.filter(item => item.olt === activeOLT);
-  const totalCustomers = filteredData.reduce((acc, curr) => acc + curr.customer_count, 0);
-  const olts = oltData.map(item => item.olt);
+  // Ensure oltData is always an array
+  const data = oltData || [];
 
+  const filteredData = activeOLT === 'all' ? data : data.filter(item => item.olt === activeOLT);
+  
+  // Ensure filteredData is always an array
+  const totalCustomers = filteredData.reduce((acc, curr) => acc + (curr.customer_count || 0), 0);
+
+  const olts = data.map(item => item.olt);
   return (
     <Card className="flex flex-col bg-[var(--foreground)] rounded-lg pb-8">
       <CardHeader className="flex-row items-start space-y-0 pb-2">

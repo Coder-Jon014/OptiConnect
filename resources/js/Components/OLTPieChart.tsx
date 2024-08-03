@@ -54,6 +54,7 @@ type OLTPieChartProps = {
 };
 
 const OLTPieChart: React.FC<OLTPieChartProps> = ({ oltData }) => {
+  console.log('OLT DATA', oltData);
   const [activeOLT, setActiveOLT] = React.useState<string | null>('all');
 
   // Ensure oltData is always an array
@@ -62,6 +63,7 @@ const OLTPieChart: React.FC<OLTPieChartProps> = ({ oltData }) => {
   const filteredData = activeOLT === 'all' ? data : data.filter(item => item.olt === activeOLT);
   
   // Ensure filteredData is always an array
+  console.log('FILTERED DATA', filteredData);
   const totalCustomers = filteredData.reduce((acc, curr) => acc + (curr.customer_count || 0), 0);
 
   const olts = data.map(item => item.olt);

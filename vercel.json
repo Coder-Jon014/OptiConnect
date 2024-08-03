@@ -1,16 +1,23 @@
 {
     "version": 2,
-      "framework" : null,
-    "functions": {
-        "api/**/*.php": {
-            "runtime": "php-8.2.4"
+    "builds": [
+      {
+        "src": "api/index.php",
+        "use": "@vercel/static-build",
+        "config": {
+          "distDir": "public"
         }
-    },
-    "routes": [{
-        "src": "/.*",
+      },
+      {
+        "src": "api/index.php",
+        "use": "@vercel/php"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
         "dest": "/api/index.php"
-    }]
-
-      
+      }
+    ]
   }
   

@@ -70,6 +70,9 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
     setDrawerData({ teams: [], outage: null });
   };
 
+  //add outage.refund_amount to drawerData
+  
+
   const handleSave = (teamId) => {
     Inertia.post('/outages/reassign', {
       outage_id: selectedOutage.outage_id,

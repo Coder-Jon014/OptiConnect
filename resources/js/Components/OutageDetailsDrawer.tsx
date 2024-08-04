@@ -80,7 +80,7 @@ const OutageDetailsDrawer = ({ data, isOpen, onClose, onSave, isLoading }) => {
                     <p className='text-white'><strong>End Time:</strong> {outage.end_time}</p>
                     <p className='text-white'><strong>Duration:</strong> {Math.max(0, (outage.duration / 24)).toFixed(0)} days</p>
                     <p className='text-white'><strong>Status:</strong> {outage.status ? 'Active' : 'Resolved'}</p>
-                    <p className='text-white'><strong>Refund Amount:</strong> {outage.sla ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(outage.sla.refund_amount) : 'N/A'}</p>
+                    <p className='text-white'><strong>Refund Amount:</strong> {outage.sla.refund_amount ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(outage.sla.refund_amount) : 'N/A'}</p>
                 </div>
                 {outage.status === 1 && (
                 <Form {...form}>

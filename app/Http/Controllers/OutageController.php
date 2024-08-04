@@ -283,6 +283,10 @@ class OutageController extends Controller
         if (!$outage) {
             return response()->json(['error' => 'Outage not found'], 404);
         }
+
+        //Get SLA for outage then get the refund_amount
+        $sla = SLA::where('outage_history_id', $outage->id)->first();
+        $refund_amount = $sla->refund_amount;
     
         // Find the OLT related to the outage
         $olt = OLT::find($outage->olt_id);
@@ -297,8 +301,10 @@ class OutageController extends Controller
         })->get();
 
         return response()->json([
+
             'teams' => TeamResource::collection($teams),
             'outage' => new OutageResource($outage),
+            'sla' => new SLAResource($sla),
         ]);
     }
     

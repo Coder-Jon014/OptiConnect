@@ -1,14 +1,20 @@
 # Opticonnect
 
-Opticonnect is a management information system designed to monitor and manage Optical Line Terminals (OLTs) for Internet Service Providers (ISPs). The system provides real-time alerts, resource checks, and optimal team selection to ensure swift and efficient resolution of any OLT issues.
+Opticonnect is a management information system designed to monitor and manage Optical Line Terminals (OLTs) for Internet Service Providers (ISPs). The system provides real-time alerts, resource checks, and optimal team selection to ensure swift and efficient resolution of any OLT issues. Additionally, it incorporates advanced financial analysis to assess the economic impact of each outage and optimize resource allocation for cost efficiency.
+
+![image](https://github.com/user-attachments/assets/2dbce59e-808c-4e43-a4f6-1aadddddcd7b) ![image](https://github.com/user-attachments/assets/a2678274-8e47-4e00-9878-4516900d25a1) ![image](https://github.com/user-attachments/assets/1e91139c-04f4-494e-b572-b7f94e317404)
+
 
 ## Features
 
 - **Real-time Alerts**: Immediate notifications for any OLT issues.
+- **Financial Analysis**: Calculates the economic impact of each outage based off SLA Requirements to optimize resource allocation and reduce costs.
 - **Resource Management**: Checks and allocates necessary resources for problem resolution.
 - **Optimal Team Selection**: Ensures the best team is chosen based on the resources required and team availability.
 - **Historical Data**: Stores and manages outage history for analysis and reporting.
 - **User Management**: Handles user authentication and profile management.
+  
+
 
 ## Technologies Used
 

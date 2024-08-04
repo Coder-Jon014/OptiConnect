@@ -16,7 +16,9 @@ Opticonnect is a management information system designed to monitor and manage Op
 - **Frontend Framework**: [React](https://reactjs.org/)
 - **State Management**: [Inertia.js](https://inertiajs.com/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Database**: SQLite (or any preferred database)
+- **Database**: Postgres (or any preferred database)
+- **Deployment and Server Management**: [Laravel Forge](https://forge.laravel.com/)
+- **Cloud Hosting**: [Digital Ocean](https://www.digitalocean.com/)
 
 ## Installation
 
@@ -26,7 +28,7 @@ Ensure you have the following installed:
 - PHP >= 7.4
 - Composer
 - Node.js & npm
-- SQLite (or any other preferred database)
+- Postgres (or any other preferred database)
 
 ### Steps
 

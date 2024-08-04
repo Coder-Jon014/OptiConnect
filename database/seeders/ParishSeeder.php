@@ -14,7 +14,7 @@ class ParishSeeder extends Seeder
             ['parish_id' => 3, 'parish_name' => 'Kingston'],
             ['parish_id' => 4, 'parish_name' => 'St. Ann'],
             ['parish_id' => 5, 'parish_name' => 'Manchester'],
-        ];
+        ];        
 
         foreach ($parishes as $parish) {
             DB::table('parishes')->updateOrInsert(['parish_id' => $parish['parish_id']], $parish);

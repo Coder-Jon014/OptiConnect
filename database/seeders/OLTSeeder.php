@@ -23,7 +23,7 @@ class OLTSeeder extends Seeder
             ['olt_name' => 'OLT Dumfries', 'parish_id' => 3, 'town_id' => 9, 'rank' => 1],
             ['olt_name' => 'OLT Barbican', 'parish_id' => 3, 'town_id' => 3, 'rank' => 4],
             ['olt_name' => 'OLT Independence City', 'parish_id' => 2, 'town_id' => 2, 'rank' => 5],
-        ];
+        ];        
 
         foreach ($olts as $oltData) {
             // Create a new OLT instance

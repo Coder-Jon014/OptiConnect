@@ -26,7 +26,6 @@ class TownSeeder extends Seeder
                 'town_id' => $town['town_id'],
                 'town_name' => $town['town_name'],
                 'parish_id' => $town['parish_id'],
-                'rank' => $town['rank'],
             ]);
         }
     }

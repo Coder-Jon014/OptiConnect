@@ -62,7 +62,6 @@ const OutageDetailsDrawer = ({ data, isOpen, onClose, onSave, isLoading }) => {
     const outage = data.outage;
     const inactiveTeams = teams.filter(team => team.status !== 1);
 
-    console.log(outage);
 
     return (
         <Drawer open={isOpen} onClose={onClose}>

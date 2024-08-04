@@ -5,7 +5,7 @@ import Pagination from '@/Components/Pagination';
 
 export default function Index({ auth, slas, queryParams }) {
     const slaList = slas.data || [];
-    console.log(slaList);
+    // console.log(slaList);
 
     return (
         <AuthenticatedLayout

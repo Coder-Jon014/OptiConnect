@@ -3,7 +3,7 @@ import { OLT_LEVEL_CLASS_MAP } from "@/constants";
 import { Head } from "@inertiajs/react";
 
 export default function Index({ auth, olts }) {
-    console.log(olts);
+    // console.log(olts);
     return (
         <AuthenticatedLayout
             user={auth.user}

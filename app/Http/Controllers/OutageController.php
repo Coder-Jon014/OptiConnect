@@ -170,8 +170,9 @@ class OutageController extends Controller
         $verifiedNumbers = [
             '18762922254',
             '18765528469',
-            '18763368664',
+            '18764653933',
             '18763477662',
+            '18764391884'
         ];
 
         $customers = Customer::where('town_id', $olt->town_id)
@@ -200,8 +201,9 @@ class OutageController extends Controller
         $verifiedNumbers = [
             '18762922254',
             '18765528469',
-            '18763368664',
+            '18764653933',
             '18763477662',
+            '18764391884'
         ];
 
         $customers = Customer::where('town_id', $olt->town_id)

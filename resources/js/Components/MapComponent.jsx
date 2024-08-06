@@ -15,7 +15,7 @@ import '@/assets/Map.css';
 const towers = [
     { id: 'OLT Negril', top: '34%', left: '19%' },
     { id: 'OLT Mandeville', top: '57%', left: '42%' },
-    { id: 'OLT St. Anns Bay', top: '29%', left: '48%' },
+    { id: 'OLT St. Anns Bay', top: '29%', left: '42%' },
     { id: 'OLT Independence City', top: '68%', left: '59%' },
     { id: 'OLT Old Harbour', top: '65%', left: '56%' },
     { id: 'OLT St. Jago', top: '59%', left: '60%' },

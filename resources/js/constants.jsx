@@ -17,6 +17,6 @@ export const OLT_RANKING_CLASS_MAP = {
 }
 
 export const OLT_LEVEL_CLASS_MAP = {
-    'Low' : 'text-green-500',
-    'High' : 'text-red-500',
+    'Low' : 'text-red-500',
+    'High' : 'text-green-500',
 }

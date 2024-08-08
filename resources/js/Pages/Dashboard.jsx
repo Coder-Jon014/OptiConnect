@@ -39,19 +39,19 @@ const Dashboard = ({ auth, recentOutages, teamStatus, oltData, stats }) => {
                         />
                     ))}
                     <div className="container">
-                        <div className="Number-Card-1 rounded-lg inline-block">
+                        <div className="Number-Card-1 rounded-lg">
                             <NumbersCard title="Total Number of Outages this Month" value={stats.totalOutages} description="Total outages occurred this month" />
                         </div>
-                        <div className="Number-Card-2 rounded-lg inline-block">
+                        <div className="Number-Card-2 rounded-lg">
                             <NumbersCard title="Days Since The Last Outage" value={stats.daysSinceLastOutage} description="Days since last outage" />
                         </div>
-                        <div className="Number-Card-3 rounded-lg inline-block">
+                        <div className="Number-Card-3 rounded-lg">
                             <NumbersCard title="Total Refund for This Month" value={formatValue(stats.totalRefund)} other='USD' description="Total refund for this month" />
                         </div>
-                        <div className="Number-Card-4 rounded-lg inline-block">
+                        <div className="Number-Card-4 rounded-lg">
                             <NumbersCard title="Total Outages Solved Within SLA" value={stats.totalNoRefund} description="Total outages solved within SLA" />
                         </div>
-                        <div className="OLT-Breakdown rounded-lg inline-block">
+                        <div className="OLT-Breakdown rounded-lg">
                             <OLTPieChart oltData={oltData} />
                         </div>
                         <div className="OLT-Value-Breakdown">
@@ -60,13 +60,13 @@ const Dashboard = ({ auth, recentOutages, teamStatus, oltData, stats }) => {
                         <div className="MapComponent">
                         <MapComponent title="OLT Deployment Map" ongoingOutages={ongoingOutages} onTowerClick={() => {}} />
                         </div>
-                        <div className="Teams rounded-lg inline-block">
+                        <div className="Teams rounded-lg">
                             <TeamsDeployed teams={teamStatus} />
                         </div>
-                        <div className="List-Of-Recent-Outages rounded-lg inline-block">
+                        <div className="List-Of-Recent-Outages rounded-lg">
                             <RecentOutages outages={recentOutages} />
                         </div>
-                        <div className="Number-Of-Times-Deployed rounded-lg inline-block">
+                        <div className="Number-Of-Times-Deployed rounded-lg">
                             <NumberOfTimesTeamDeployedChart data={stats.numberofTimeTeamdeployed} />
                         </div>
                     </div>

@@ -20,61 +20,109 @@
 .Number-Card-1 {
   background-color: red;
   grid-area: Number-Card-1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .Number-Card-2 {
   background-color: green;
   grid-area: Number-Card-2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .Number-Card-3 {
   background-color: blue;
   grid-area: Number-Card-3;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .Number-Card-4 {
   background-color: yellow;
   grid-area: Number-Card-4;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .MapComponent {
   grid-area: MapComponent;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .OLT-Breakdown {
   grid-area: OLT-Breakdown;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .OLT-Value-Breakdown {
   grid-area: Refund-Amount;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .Teams {
   grid-area: Teams;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .List-Of-Recent-Outages {
   grid-area: List-Of-Recent-Outages;
-}
-
-.Number-Card-1 {
-  grid-area: Number-Card-1;
-}
-
-.Number-Card-2 {
-  grid-area: Number-Card-2;
-}
-
-.Number-Card-3 {
-  grid-area: Number-Card-3;
-}
-
-.Number-Card-4 {
-  grid-area: Number-Card-4;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .Number-Of-Times-Deployed {
-  grid-area: Number-Of-Times-Deployed; 
+  grid-area: Number-Of-Times-Deployed;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Number-Of-Times-Deployed > *,
+.Teams > *,
+.MapComponent > *,
+.OLT-Breakdown > *,
+.OLT-Value-Breakdown > *,
+.List-Of-Recent-Outages > *,
+.Number-Card-1 > *,
+.Number-Card-2 > *,
+.Number-Card-3 > *,
+.Number-Card-4 > * {
+  width: 100%;
+  height: 100%;
 }
 
 /* Responsive layout for smaller screens */

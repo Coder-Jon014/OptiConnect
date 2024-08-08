@@ -45,7 +45,9 @@ export default function Index({ auth, olts }) {
                                                     <td className="py-2 px-4 ">{olt.olt_value}</td>
                                                     <td className="py-2 px-4 ">{olt.resource_name}</td>
                                                     <td className="py-2 px-4 ">{olt.rank}</td>
-                                                    <td className={`py-2 px-4 rounded-r-lg ${OLT_LEVEL_CLASS_MAP[olt.level ? 'High' : 'Low']}`}>{olt.level}</td>
+                                                    <td className={`py-2 px-4 rounded-r-lg ${OLT_LEVEL_CLASS_MAP[olt.level]}`}>
+                                                        {olt.level}
+                                                    </td>
                                                 </tr>
                                             ))}
                                         </tbody>

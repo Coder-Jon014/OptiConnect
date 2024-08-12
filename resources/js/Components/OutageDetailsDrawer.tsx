@@ -84,7 +84,7 @@ const OutageDetailsDrawer = ({ data, isOpen, onClose, onSave, isLoading }) => {
                     <p className='text-white'><strong>Refund Amount:</strong> {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(outage.refund_amount)}</p>
 
                 </div>
-                {outage.status === 1 && (
+                {outage.status === true && (
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(handleSave)} className="space-y-6 p-4">
                             <FormField

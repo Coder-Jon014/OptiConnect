@@ -17,9 +17,8 @@ class CreateOltsTable extends Migration
             $table->integer('business_customer_count')->default(0);
             $table->integer('residential_customer_count')->default(0);
             $table->decimal('olt_value', 10, 2)->default(0);
-            $table->integer('rank')->default(0);
             $table->string('level')->default('Low');
-            $table->unsignedBigInteger('resource_id');
+            $table->unsignedBigInteger('resource_id')->nullable();
             $table->timestamps();
 
             // Foreign key constraints

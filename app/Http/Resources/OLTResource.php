@@ -32,7 +32,6 @@ class OLTResource extends JsonResource
             'business_customer_count' => $this->business_customer_count,
             'residential_customer_count' => $this->residential_customer_count,
             'olt_value' => $this->olt_value,
-            'rank' => $this->rank,
             'level' => $this->level,
             'resource_name' => $resourceName,
         ];

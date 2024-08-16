@@ -40,7 +40,9 @@ export function RecentOutages({ outages }) {
                 <TableCell>
                   <div className="font-medium text-white">{outage.olt.olt_name}</div>
                 </TableCell>
-                <TableCell className="hidden sm:table-cell text-white">{outage.team.team_name} {outage.team.team_type}</TableCell>
+                <TableCell className="hidden sm:table-cell text-white">
+                  {outage.team ? `${outage.team.team_name} ${outage.team.team_type}` : 'No team assigned'}
+                </TableCell>
                 <TableCell className="hidden sm:table-cell">
                   <Badge className="text-xs text-white outline" variant={outage.status ? "secondary" : "outline"}>
                     {outage.status ? "Active" : "Resolved"}

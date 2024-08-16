@@ -35,7 +35,10 @@ const Dashboard = ({ auth, recentOutages, teamStatus, oltData, stats }) => {
                         <AlertDestructive
                             key={index}
                             header="Outage Ongoing"
-                            message={`${outage.olt.olt_name} is currently having an outage with ${outage.team.team_type} ${outage.team.team_name} assigned to it.`}
+                            message={outage.team && outage.team.team_type && outage.team.team_name
+                                ? `${outage.olt.olt_name} is currently having an outage with ${outage.team.team_type} ${outage.team.team_name} assigned to it.`
+                                : `${outage.olt.olt_name} is currently having an outage`
+                            }
                         />
                     ))}
                     <div className="container">

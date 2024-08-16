@@ -25,15 +25,17 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            // ParishSeeder::class,
-            // TownSeeder::class,
-            // ResourceSeeder::class,
-            // TeamSeeder::class,
-            // CustomerTypeSeeder::class,
+            ParishSeeder::class,
+            TownSeeder::class,
+            ResourceSeeder::class,
+            TeamSeeder::class,
+            CustomerTypeSeeder::class,
             // CustomerSeeder::class,
             // OLTSeeder::class,
+            OutageTypeSeeder::class,
             // OutageHistorySeeder::class,
             // SLASeeder::class,
+            
         ]);
     }
 }

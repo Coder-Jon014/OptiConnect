@@ -23,6 +23,7 @@
     --destructive-foreground: hsl(0 0% 100%);
     --border: hsl(240, 4%, 16%);
     --input: hsl(240 5.9% 10%);
+    --input-hover: hsl(240, 2%, 19%);
     --ring: hsl(240 4.9% 83.9%);
     --radius: 0.5rem;
     --chart-1: hsl(12 76% 61%);

@@ -12,9 +12,11 @@ class ResourceSeeder extends Seeder
         $resources = [
             'Bucket-Truck',
             'Splicer',
+            'Fiber Technician',
+            'Tier 1 Technician',
             'Cable Engineer',
-            'Fiber technician',
-            'Bucket Van',
+            'Bucket-Van',
+            'PPE',
         ];
 
         foreach ($resources as $resource) {

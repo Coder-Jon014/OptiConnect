@@ -18,6 +18,8 @@ class ParishSeeder extends Seeder
 
         foreach ($parishes as $parish) {
             DB::table('parishes')->updateOrInsert(['parish_id' => $parish['parish_id']], $parish);
+            //Update timestamp
+            DB::table('parishes')->where('parish_id', $parish['parish_id'])->update(['created_at' => now(), 'updated_at' => now()]);
         }
     }
 }

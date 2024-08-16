@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\OutageHistory;
 use App\Http\Resources\OutageResource;
+use App\Http\Resources\OLTResource;
+use App\Http\Resources\OutageTypesResource;
 use App\Http\Resources\TeamResource;
 use Inertia\Inertia;
 use Carbon\Carbon;
@@ -16,6 +18,7 @@ use App\Models\OLT;
 use App\Models\Team;
 use App\Models\Customer;
 use App\Models\SLA;
+use App\Models\OutageTypes;
 use Illuminate\Support\Facades\Log;
 
 class OutageController extends Controller
@@ -26,8 +29,9 @@ class OutageController extends Controller
         $query = OutageHistory::query()
             ->with([
                 'olt:olt_id,olt_name', 
-                'team:team_id,team_name,team_type', 
-                'sla:id,outage_history_id,refund_amount'
+                'team:team_id,team_name,team_type,deployment_cost', 
+                'sla:id,outage_history_id,refund_amount',
+                'outageType:outage_type_id,outage_type_name,resource_id'
             ])
             ->select('outage_histories.*');
     
@@ -48,6 +52,13 @@ class OutageController extends Controller
                 $q->where('team_name', 'LIKE', '%' . $request->input('team') . '%');
             });
         }
+
+        // Filtering by Outage Type
+        if ($request->input('outage_type')) {
+            $query->whereHas('outageType', function($q) use ($request) {
+                $q->where('outage_type_name', 'LIKE', '%' . $request->input('outage_type') . '%');
+            });
+        }
     
         // Handle sorting fields
         if ($sortField === 'olt') {
@@ -58,6 +69,14 @@ class OutageController extends Controller
             $query->join('teams', 'outage_histories.team_id', '=', 'teams.team_id')
                   ->select('outage_histories.*')
                   ->orderBy('teams.team_name', $sortDirection);
+        } elseif ($sortField === 'outage_type') {
+            $query->join('outage_types', 'outage_histories.outage_type_id', '=', 'outage_types.outage_type_id')
+                  ->select('outage_histories.*')
+                  ->orderBy('outage_types.outage_type_name', $sortDirection);
+        } elseif ($sortField === 'deployment_cost') {
+            $query->join('teams', 'outage_histories.team_id', '=', 'teams.team_id')
+                  ->select('outage_histories.*')
+                  ->orderBy('teams.deployment_cost', $sortDirection);
         } else {
             $query->orderBy($sortField, $sortDirection);
         }
@@ -78,6 +97,8 @@ class OutageController extends Controller
     private function calculateAndSaveSLA($outage)
     {
         $olt = OLT::find($outage->olt_id);
+        $businessRefund = false;
+        $residentialRefund = false;
 
         if ($olt) { // Ensure OLT exists
             $businessCustomers = Customer::where('town_id', $olt->town_id)
@@ -87,34 +108,57 @@ class OutageController extends Controller
                                             ->where('customer_type_id', 1)
                                             ->count();
 
-            // Convert duration to hours and round to the nearest two decimal places
+           // Convert duration to hours and round to the nearest whole number
             $maxDuration = round($outage->duration / 3600);
-            
+
             // Get team assigned to outage
             $teamAssignedToOutage = $outage->team_id;
 
+            // Initialize refund variables
+            $businessRefund = false;
+            $residentialRefund = false;
+            $BizRefund = 0.00;
+            $ResRefund = 0.00;
+
             if ($businessCustomers > 0 && $maxDuration >= 24) {
-                $compensationDetails = 'Refund';
-            } elseif ($residentialCustomers > 0 && $maxDuration >= 72) {
-                $compensationDetails = 'Refund';
-            } else {
-                $compensationDetails = 'No Refund';
+                $businessRefund = true;
+                if ($maxDuration >= 72) {
+                    $residentialRefund = true;
+                }
             }
 
-            // Process SLA for refund calculation
-            if ($compensationDetails == 'Refund') {
+            if ($businessRefund || $residentialRefund) {
+                $compensationDetails = 'Refund';
                 $outageDurationDays = round($maxDuration / 24); // Convert duration from hours to days
-                $residentialRefund = ($outageDurationDays / 30) * 32 * $residentialCustomers;
-                $businessRefund = ($outageDurationDays / 30) * 1200 * $businessCustomers;
-                $refundAmount = $residentialRefund + $businessRefund;
+                
+                if ($businessRefund) {
+                    $BizRefund = ($outageDurationDays / 30) * 1200 * $businessCustomers;
+                }
+                
+                if ($residentialRefund) {
+                    $ResRefund = ($outageDurationDays / 30) * 32 * $residentialCustomers;
+                }
+                
+                $refundAmount = $BizRefund + $ResRefund;
                 $resolutionDetails = 'Outage was not resolved within the SLA';
             } else {
+                $compensationDetails = 'No Refund';
                 $refundAmount = 0.00;
                 $resolutionDetails = 'Outage was resolved within the SLA';
             }
 
+
             //Update Outage Resolution Details
             $outage->update(['resolution_details' => $resolutionDetails]);
+
+            // // Update the SLA record
+            // $sla = SLA::where('outage_history_id', $outage->id)->first();
+            // $sla->update([
+            //     'max_duration' => $maxDuration,
+            //     'compensation_details' => $compensationDetails,
+            //     'refund_amount' => $refundAmount,
+            //     'team_id' => $teamAssignedToOutage,
+            // ]);
 
             // Create the SLA record
             SLA::create([
@@ -131,37 +175,47 @@ class OutageController extends Controller
 
     public function generateOutage(Request $request)
     {
-        $olt = OLT::where('customer_count', '>', 0)->inRandomOrder()->first();
+        $maxAttempts = 10; // Limit the number of attempts to prevent infinite loops
+        $attempts = 0;
 
-        if (!$olt) {
-            return response()->json(['message' => 'No OLT with customers found'], 404);
+        do {
+            // Select a random OLT with customers
+            $olt = OLT::where('customer_count', '>', 0)->inRandomOrder()->first();
+
+            if (!$olt) {
+                return response()->json(['message' => 'No OLT with customers found'], 404);
+            }
+
+            // Check if the OLT has an active outage
+            $activeOutage = OutageHistory::where('olt_id', $olt->olt_id)->where('status', true)->exists();
+
+            $attempts++;
+        } while ($activeOutage && $attempts < $maxAttempts);
+
+        if ($activeOutage) {
+            return response()->json(['message' => 'Unable to find an OLT without an active outage'], 404);
         }
 
-        $resourceId = $olt->resource_id;
+        // Select a random outage type
+        $outageType = OutageTypes::inRandomOrder()->first();
 
-        $team = Team::whereHas('resources', function ($query) use ($resourceId) {
-            $query->where('resources.resource_id', $resourceId);
-        })->where('status', 0)->first();
-
-        if (!$team) {
-            return response()->json(['message' => 'No team available'], 404);
+        if (!$outageType) {
+            return response()->json(['message' => 'No outage types found'], 404);
         }
 
+        // Create the outage
         $outage = OutageHistory::create([
             'olt_id' => $olt->olt_id,
-            'team_id' => $team->team_id,
+            'outage_type_id' => $outageType->outage_type_id,
             'start_time' => now(),
-            'status' => true,
+            'status' => true, // true indicates an active outage
+            'resolution_details' => 'Outage in progress',
         ]);
 
-        $team->update(['status' => true]);
+        // Optionally, you can send notifications here
+        // $this->sendNewOutageNotifications($olt);
 
-        $this->sendNewOutageNotifications($olt);
-
-        // Calculate and save SLA
-        $this->calculateAndSaveSLA($outage);
-
-        return Redirect::back()->with('success', 'Outage generated successfully');
+        return Redirect::back()->with('success', 'Outage started successfully. Please assign a team.');
     }
 
 
@@ -248,7 +302,7 @@ class OutageController extends Controller
                 $outage->team->update(['status' => false]);
             }
 
-            $this->sendOutageEndNotifications($outage->olt); // Send end notifications
+            // $this->sendOutageEndNotifications($outage->olt); // Send end notifications
             $this->calculateAndSaveSLA($outage); // Calculate and save SLA
         }
 
@@ -272,7 +326,7 @@ class OutageController extends Controller
         return $path;
     }
 
-    public function teamsWithOLTResource(Request $request)
+    public function teamsWithResource(Request $request)
     {
         // Validate the outage_id
         $request->validate([
@@ -293,15 +347,57 @@ class OutageController extends Controller
             return response()->json(['error' => 'OLT not found'], 404);
         }
     
-        // Retrieve teams with resources matching the OLT's resource_id
-        $teams = Team::whereHas('resources', function ($query) use ($olt) {
-            $query->where('resources.resource_id', $olt->resource_id);
-        })->get();
+        // Find the outage type related to the outage
+        $outageType = OutageTypes::find($outage->outage_type_id);
+
+        if (!$outageType) {
+            return response()->json(['error' => 'Outage type not found'], 404);
+        }
+
+        // Get the required resources
+        $requiredResources = [$olt->resource_id, $outageType->resource_id];
+        Log::info('Required resources:', ['requiredResources' => $requiredResources]);
+
+        // Retrieve teams with resources matching both the OLT's resource_id and the outage type's resource_id
+        $teams = Team::where('status', false)
+            ->whereHas('resources', function ($query) use ($requiredResources) {
+                $query->whereIn('resources.resource_id', $requiredResources);
+            })
+            ->with(['resources' => function ($query) use ($requiredResources) {
+                $query->whereIn('resources.resource_id', $requiredResources);
+            }])
+            ->get();
+
+        // Sort teams based on the number of matching resources
+        $sortedTeams = $teams->sortByDesc(function ($team) use ($requiredResources) {
+            return $team->resources->whereIn('resource_id', $requiredResources)->count();
+        })->values();
 
         return response()->json([
-            'teams' => TeamResource::collection($teams),
+            'olt' => new OLTResource($olt),
+            'outageType' => new OutageTypesResource($outageType),
+            'teams' => TeamResource::collection($sortedTeams),
             'outage' => new OutageResource($outage),
         ]);
+    }
+
+    public function assignTeamToOutage(Request $request)
+    {
+        $request->validate([
+            'outage_id' => 'required|exists:outage_histories,id',
+            'team_id' => 'required|exists:teams,team_id',
+        ]);
+
+        $outage = OutageHistory::find($request->outage_id);
+        $team = Team::find($request->team_id);
+
+        $outage->update([
+            'team_id' => $team->team_id,
+        ]);
+
+        $team->update(['status' => true]);
+
+        return response()->json(['message' => 'Team assigned successfully']);
     }
     
 
@@ -315,6 +411,10 @@ class OutageController extends Controller
             'outage_id' => 'required|exists:outage_histories,id',
             'team_id' => 'required|exists:teams,team_id',
         ]);
+
+        //log the outage_id and team_id
+        Log::info('Outage ID:', ['outage_id' => $request->outage_id]);
+        Log::info('Team ID:', ['team_id' => $request->team_id]);
 
         $outage = OutageHistory::find($request->outage_id);
         $newTeam = Team::find($request->team_id);

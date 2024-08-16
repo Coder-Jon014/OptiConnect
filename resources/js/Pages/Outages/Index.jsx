@@ -5,11 +5,18 @@ import Pagination from '@/Components/Pagination';
 import OutageDetailsDrawer from '@/Components/OutageDetailsDrawer';
 import { OUTAGE_STATUS_CLASS_MAP } from '@/constants';
 import TableHeading from '@/Components/TableHeading';
+import AssignTeamButton from '@/Components/AssignTeamButton';
+import AssignTeamDialog from '@/Components/AssignTeamDialog';
 import axios from 'axios';
 
-export default function Index({ auth, outages, slas, queryParams = null }) {
+export default function Index({ auth, outages, teams, queryParams = null }) {
+
+  // console.log(outages);
+
   const [selectedOutage, setSelectedOutage] = useState(null);
   const [drawerData, setDrawerData] = useState({ teams: [], outage: null });
+  const [dialogData, setDialogData] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   queryParams = queryParams || {};
@@ -56,7 +63,8 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
     setSelectedOutage(outage);
     setIsLoading(true);
     try {
-      const response = await axios.get(route('outage.teamsWithOLTResource', { outage_id: outage.outage_id }));
+      const response = await axios.get(route('outage.teamsWithResource', { outage_id: outage.outage_id }));
+      console.log(response.data);
       setDrawerData(response.data);
     } catch (error) {
       console.error("Failed to fetch drawer data:", error);
@@ -70,13 +78,40 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
     setDrawerData({ teams: [], outage: null });
   };
 
-  const handleSave = (teamId) => {
-    Inertia.post('/outages/reassign', {
-      outage_id: selectedOutage.outage_id,
-      team_id: teamId,
-    }).then(() => {
-      setSelectedOutage(null);
-    });
+  const handleOpenDialog = async (outage) => {
+    setSelectedOutage(outage);
+    setIsLoading(true);
+    try {
+      const response = await axios.get(route('outage.teamsWithResource', { outage_id: outage.outage_id }));
+      setDialogData(response.data);
+      setIsDialogOpen(true);
+    } catch (error) {
+      console.error("Failed to fetch dialog data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setSelectedOutage(null);
+    setDialogData(null);
+    setIsDialogOpen(false);
+  };
+
+  const handleSave = async (teamId) => {
+    console.log(selectedOutage.outage_id, teamId);
+    try {
+      await router.post(route('outage.reassign'), {
+        outage_id: selectedOutage.outage_id,
+        team_id: teamId,
+      }, {
+        preserveScroll: true,
+      });
+      handleCloseDialog();
+    } catch (error) {
+      console.error("Failed to reassign outage:", error);
+      // Optionally, show an error message to the user
+    }
   };
 
   return (
@@ -146,6 +181,22 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
                           Team Type
                         </TableHeading>
                         <TableHeading
+                          name="deployment_cost"
+                          sort_direction={queryParams.sort_direction}
+                          sort_field={queryParams.sort_field}
+                          sortChanged={sortChanged}
+                        >
+                          Deployment Cost
+                        </TableHeading>
+                        <TableHeading
+                          name="outage_type_name"
+                          sort_direction={queryParams.sort_direction}
+                          sort_field={queryParams.sort_field}
+                          sortChanged={sortChanged}
+                        >
+                          Outage Type
+                        </TableHeading>
+                        <TableHeading
                           name="start_time"
                           sort_direction={queryParams.sort_direction}
                           sort_field={queryParams.sort_field}
@@ -185,6 +236,10 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
                         >
                           Refund Amount
                         </TableHeading>
+                        <TableHeading
+                        >
+                          Team Details
+                        </TableHeading>
                       </tr>
                     </thead>
                     <tbody>
@@ -201,11 +256,27 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
                           </td>
                           <td className="py-2 px-4 ">{outage.team}</td>
                           <td className="py-2 px-4 ">{outage.team_type}</td>
+                          <td className="py-2 px-4 ">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(outage.deployment_cost)}</td>
+                          <td className="py-2 px-4 ">{outage.outage_type}</td>
                           <td className="py-2 px-4 ">{outage.start_time}</td>
                           <td className="py-2 px-4 ">{outage.end_time}</td>
                           <td className="py-2 px-4 ">{Math.max(0, (outage.duration / 24)).toFixed(0)}</td>
                           <td className={`py-2 px-4 ${OUTAGE_STATUS_CLASS_MAP[outage.status ? 'Active' : 'Resolved']}`}>{outage.status ? 'Active' : 'Resolved'}</td>
                           <td className="py-2 px-4 rounded-r-lg">{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(outage.refund_amount)}</td>
+                          <td className="py-2 px-4 rounded-r-lg">
+                            {outage.status && !outage.team_id && (
+                              <AssignTeamButton 
+                                onClick={() => handleOpenDialog(outage)}
+                                description="Assign Team"
+                              />
+                            )}
+                            {outage.status && outage.team_id && (
+                              <AssignTeamButton 
+                                onClick={() => handleOpenDialog(outage)}
+                                description="Reassign Team"
+                              />
+                            )}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -224,6 +295,14 @@ export default function Index({ auth, outages, slas, queryParams = null }) {
           onClose={handleCloseDrawer}
           onSave={handleSave}
           isLoading={isLoading}
+        />
+      )}
+      {dialogData && (
+        <AssignTeamDialog
+          isOpen={isDialogOpen}
+          onClose={handleCloseDialog}
+          data={dialogData}
+          onSave={handleSave}
         />
       )}
     </AuthenticatedLayout>

@@ -12,6 +12,7 @@ class CreateOutageHistoriesTable extends Migration
             $table->id('id');
             $table->unsignedBigInteger('olt_id')->nullable()->index(); // Index for faster lookups
             $table->unsignedBigInteger('team_id')->nullable()->index(); // Index for faster lookups
+            $table->unsignedBigInteger('outage_type_id')->nullable()->index(); // Index for faster lookups
             $table->timestamp('start_time')->index(); // Index for faster time range queries
             $table->timestamp('end_time')->nullable()->index(); // Index for faster time range queries
             $table->bigInteger('duration')->nullable();
@@ -22,6 +23,7 @@ class CreateOutageHistoriesTable extends Migration
             // Foreign keys
             $table->foreign('olt_id')->references('olt_id')->on('olts')->onDelete('cascade');
             $table->foreign('team_id')->references('team_id')->on('teams')->onDelete('cascade');
+            $table->foreign('outage_type_id')->references('outage_type_id')->on('outage_types')->onDelete('cascade');
         });
     }
 

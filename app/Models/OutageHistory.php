@@ -13,12 +13,13 @@ class OutageHistory extends Model
 
     protected $fillable = [
         'olt_id',
+        'outage_type_id',
         'team_id',
         'start_time',
         'end_time',
         'duration',
         'resolution_details',
-        'status'
+        'status',
     ];
 
     protected $casts = [
@@ -34,12 +35,18 @@ class OutageHistory extends Model
 
     // Define the relationship with Team
     public function team()
-    {
-        return $this->belongsTo(Team::class, 'team_id');
-    }
+{
+    return $this->belongsTo(Team::class, 'team_id', 'team_id');
+}
+
 
     public function sla()
     {
         return $this->hasOne(SLA::class, 'outage_history_id');
+    }
+
+    public function outageType()
+    {
+        return $this->belongsTo(OutageTypes::class, 'outage_type_id');
     }
 }

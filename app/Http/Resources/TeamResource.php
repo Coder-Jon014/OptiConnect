@@ -15,6 +15,7 @@ class TeamResource extends JsonResource
             'team_name' => $this->team_name,
             'team_type' => $this->team_type,
             'status' => $this->status,
+            'deployment_cost' => $this->deployment_cost,
             'resource_name' => $this->resources->pluck('resource_name')->toArray(),
         ];
     }

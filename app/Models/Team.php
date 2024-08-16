@@ -17,7 +17,8 @@ class Team extends Model
     protected $fillable = [
         'team_name',
         'team_type',
-        'status'
+        'status',
+        'deployment_cost'
     ];
 
     public function resources()
@@ -26,8 +27,11 @@ class Team extends Model
     }
 
     public function outageHistories()
-    {
-        return $this->hasMany(OutageHistory::class, 'team_id');
-    }
+{
+    return $this->hasMany(OutageHistory::class, 'team_id', 'team_id');
+}
+
+
+
 }
 

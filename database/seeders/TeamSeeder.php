@@ -11,32 +11,29 @@ class TeamSeeder extends Seeder
 {
     public function run()
     {
-        $resources = Resource::all();
-
-        Log::info('Resources Debug', ['resources' => $resources]);
-
         $teams = [
-            ['team_name' => 'Team Alpha', 'team_type' => 'External'],
-            ['team_name' => 'Team Alpha', 'team_type' => 'Internal'],
-            ['team_name' => 'Team Bravo', 'team_type' => 'External'],
-            ['team_name' => 'Team Bravo', 'team_type' => 'Internal'],
-            ['team_name' => 'Team Charlie', 'team_type' => 'External'],
-            ['team_name' => 'Team Charlie', 'team_type' => 'Internal'],
-            ['team_name' => 'Team Delta', 'team_type' => 'External'],
-            ['team_name' => 'Team Delta', 'team_type' => 'Internal'],
-            ['team_name' => 'Team Echo', 'team_type' => 'External'],
-            ['team_name' => 'Team Echo', 'team_type' => 'Internal'],
+            ['team_name' => 'Team Alpha', 'team_type' => 'External', 'resources' => [1, 2, 3, 4]],
+            ['team_name' => 'Team Alpha', 'team_type' => 'Internal', 'resources' => [2, 3]],
+            ['team_name' => 'Team Bravo', 'team_type' => 'External', 'resources' => [1, 5, 3, 6]],
+            ['team_name' => 'Team Bravo', 'team_type' => 'Internal', 'resources' => [5, 2, 7]],
+            ['team_name' => 'Team Charlie', 'team_type' => 'External', 'resources' => [5, 7, 2, 3, 4, 6]],
+            ['team_name' => 'Team Charlie', 'team_type' => 'Internal', 'resources' => [6, 3]],
+            ['team_name' => 'Team Delta', 'team_type' => 'External', 'resources' => [5, 2]],
+            ['team_name' => 'Team Delta', 'team_type' => 'Internal', 'resources' => [5, 6, 4]],
+            ['team_name' => 'Team Echo', 'team_type' => 'External', 'resources' => [2, 6, 3]],
+            ['team_name' => 'Team Echo', 'team_type' => 'Internal', 'resources' => [5, 2]],
         ];
 
         foreach ($teams as $teamData) {
-            $team = new Team($teamData);
-            $team->save();
+            $team = Team::create([
+                'team_name' => $teamData['team_name'],
+                'team_type' => $teamData['team_type'],
+                'deployment_cost' => $teamData['team_type'] == 'External' ? 850 : 520,
+            ]);
 
             if ($team->exists) {
-                $resourceIds = $resources->random(rand(1, 3))->pluck('resource_id')->toArray();
-                $team->resources()->attach($resourceIds);
-
-                Log::info('Team Resource Attach Debug', ['team_id' => $team->team_id, 'resource_ids' => $resourceIds]);
+                $team->resources()->attach($teamData['resources']);
+                Log::info('Team Resource Attach Debug', ['team_id' => $team->team_id, 'resource_ids' => $teamData['resources']]);
             } else {
                 Log::error('Failed to save team', ['team_data' => $teamData]);
             }

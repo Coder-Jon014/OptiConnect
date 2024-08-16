@@ -29,4 +29,9 @@ class Resource extends Model
     {
         return $this->hasMany(OLT::class, 'resource_id', 'resource_id');
     }
+
+    public function outageTypes()
+    {
+        return $this->hasMany(OutageTypes::class, 'resource_id', 'resource_id');
+    }
 }
